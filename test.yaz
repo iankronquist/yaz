@@ -1,0 +1,9 @@
+1 + 1
+//comment
+x = 1 + 1
+print x
+
+func add(a, b) {
+	c = a + b
+	return c
+}
