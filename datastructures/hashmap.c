@@ -1,10 +1,17 @@
 #include "hashmap.h"
 
+struct _hashnode** _hashtable_init(size_t size)
+{
+    struct _hashnode** table =
+        (struct _hashnode**)malloc(size * sizeof(struct _hashnode*));
+    return table;
+}
+
 hashmap* hashmap_new()
 {
     hashmap* map = (hashmap*)malloc(sizeof(hashmap));
     //16 seems like a good initial map size
-    map->_buckets = (struct _hashnode**)malloc(sizeof(struct _hashnode*) * 16);
+    map->_buckets = _hashtable_init(16);
     memset(map->_buckets, 0, sizeof(struct _hashnode*) * 16);
     map->numElems = 0;
     map->numBuckets = 16;
@@ -23,7 +30,7 @@ void _hashnodetable_delete(struct _hashnode** nodetable, size_t tableSize)
     struct _hashnode* tmpnode;
     for(size_t i = 0; i < tableSize; i++)
     {
-        node = node;
+        node = nodetable[i];
         while(node != NULL)
         {
             free(node->key);
@@ -177,7 +184,6 @@ void _hashmap_resize(hashmap* map, size_t newSize)
 {
     struct _hashnode** newtable = _hashtable_init(newSize);
     struct _hashnode* node;
-    struct _hashnode* tmpnode;
     for(size_t i = 0; i < map->numBuckets; i++)
     {
         node = map->_buckets[i];
