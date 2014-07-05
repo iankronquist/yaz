@@ -47,10 +47,18 @@ void hashmap_addVal(hashmap* map, char* key, void* val)
         (struct _hashnode*)malloc(sizeof(struct _hashnode));
     newnode->next = NULL;
     //The key provided may not be on the heap and may be freed elsewhere
-    //FIXME I should use strnlen
-    char* newKey = (char*)malloc(sizeof(char*)*strlen(key));
-    //FIXME I should use strncpy
-    strcpy(newKey, key);
+    //30 seems like a decent max for a key.
+    char* newKey = (char*)malloc(sizeof(char*)*(strnlen(key, KEYLEN)+1));
+    strncpy(newKey, key, KEYLEN);
+    //Checking for null termination.  Is this worth it? Is there a better method?
+    for(int i = 0; i<KEYLEN; i++){
+        if(newKey[i] == '\0'){
+            break;
+        }
+        else{
+            strcat(newKey, '\0');
+        }
+    } 
     newnode->val = val;
     size_t index = _hash(map->numBuckets, key);
     _hashnodetable_add(map->_buckets, newnode, index);
@@ -58,7 +66,7 @@ void hashmap_addVal(hashmap* map, char* key, void* val)
 }
 
 void _hashnodetable_add(struct _hashnode** nodetable,
-    struct _hashnode* newNode, size_t index)
+        struct _hashnode* newNode, size_t index)
 {
     //Initialize the new node
     struct _hashnode* node = nodetable[index];
@@ -78,8 +86,7 @@ bool hashmap_hasKey(hashmap* map, char* key)
     struct _hashnode* prevnode = node;
     while(node != NULL)
     {
-        //FIXME should use strncpy
-        if(strcpy(key, node->key) == 0)
+        if(strncpy(key, node->key, KEYLEN) == 0)//strcmp?
         {
             return true;
         }
@@ -96,8 +103,7 @@ void hashmap_removeKey(hashmap* map, char* key)
     struct _hashnode* prevnode = node;
     while(node != NULL)
     {
-        //FIXME should use strncpy
-        if(strcpy(key, node->key) == 0)
+        if(strncpy(key, node->key, KEYLEN) == 0)
         {
             free(node->key);
             free(node->val);
@@ -118,8 +124,7 @@ void* hashmap_getVal(hashmap* map, char* key)
     struct _hashnode* prevnode = node;
     while(node != NULL)
     {
-        //FIXME should use strncpy
-        if(strcpy(key, node->key) == 0)
+        if(strncpy(key, node->key, KEYLEN) == 0)
         {
             return node->val;
         }
@@ -136,8 +141,7 @@ void hashmap_setVal(hashmap* map, char* key, void* val)
     struct _hashnode* prevnode = node;
     while(node != NULL)
     {
-        //FIXME should use strncpy
-        if(strcpy(key, node->key) == 0)
+        if(strncpy(key, node->key, KEYLEN) == 0)
         {
             node->val = val;
             return;
@@ -159,8 +163,7 @@ size_t hashmap_numElems(hashmap* map)
 size_t _hash(size_t mapsize, char* key)
 {
     size_t index = 0;
-    //FIXME should use strnlen
-    for(int i = 0; i < strlen(key); i++)
+    for(int i = 0; i < strnlen(key, KEYLEN); i++)
     {
         index += key[i];
     }

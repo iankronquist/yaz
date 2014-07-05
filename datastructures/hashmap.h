@@ -16,7 +16,10 @@ struct hashmap {
 };
 
 //TODO: determine whether this is a reasonable number
+//I found some literature that suggested that value, but you may find a fancier optimization with a different one.
 #define HASHMAPMAXLOAD .75
+//30 seems like a decent maximum key size
+#define KEYLEN 30
 
 typedef struct hashmap hashmap;
 
