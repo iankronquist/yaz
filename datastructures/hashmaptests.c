@@ -1,23 +1,10 @@
 #include <stdio.h>
 #include "hashmap.h"
+#include "tests.h"
 
 void test_hashmap_new();
 void test_hashmap_addVal();
-#define EXPECT_EQ(a, b) printf("Test %s == %s ", (#a), (#b));\
-if ((a) == (b)) {\
-    puts(" passed");\
-}\
-else {\
-    puts("FAILED");\
-}
 
-#define EXPECT_NEQ(a, b) printf("Test %s != %s ", (#a), (#b));\
-if ((a) != (b)) {\
-    puts("passed");\
-}\
-else {\
-    puts("FAILED");\
-}
 
 int main()
 {
