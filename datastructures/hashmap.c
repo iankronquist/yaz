@@ -4,6 +4,7 @@ struct _hashnode** _hashtable_init(size_t size)
 {
     struct _hashnode** table =
         (struct _hashnode**)malloc(size * sizeof(struct _hashnode*));
+    memset(table, 0, size * sizeof(struct _hashnode*));
     return table;
 }
 
@@ -38,6 +39,7 @@ void _hashnodetable_delete(struct _hashnode** nodetable, size_t tableSize)
             tmpnode = node;
             node = node->next;
             free(node);
+            nodetable[i] = NULL;
         }
     }
     free(nodetable);
@@ -59,6 +61,7 @@ void hashmap_addVal(hashmap* map, char* key, void* val)
     //FIXME I should use strncpy
     strcpy(newKey, key);
     newnode->val = val;
+    newnode->key = newKey;
     size_t index = _hash(map->numBuckets, key);
     _hashnodetable_add(map->_buckets, newnode, index);
     map->numElems++;
@@ -75,7 +78,10 @@ void _hashnodetable_add(struct _hashnode** nodetable,
         prevnode = node;
         node = node->next;
     }
-    prevnode->next = newNode;
+    if(prevnode != NULL)
+        prevnode->next = newNode;
+    else
+        nodetable[index] = newNode;
 }
 
 bool hashmap_hasKey(hashmap* map, char* key)
