@@ -46,7 +46,11 @@ void tree_walk(tree* node, void func(struct treenode*))
 */
 void tree_print(tree* ast)
 {
-    tree_walk(ast, treenode_print);
+    for(size_t i = 0; i < ast->num_children; i++)
+    {
+        tree_print(ast->children[i]);
+    }
+    printf("%s\n", ast->symbol);
 }
 
 /** A static helper function for tree_print.
