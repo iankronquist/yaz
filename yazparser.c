@@ -41,7 +41,7 @@ void parseFile(char* fileName) {
     while ((line_length = getline(&line, &line_capacity, file)) > 0) {
         tree* ast = parseStatement(line);
         tree_print(ast);
-        //tree_delete(ast);
+        tree_delete(ast);
     }
     fclose(file);
 }
@@ -52,7 +52,7 @@ tree* parseStatement(char* line) {
     tree* astRoot = (tree*) malloc(sizeof(struct treenode));
     tree* parent = astRoot;
     astRoot->num_children = 0;
-    astRoot->children = (tree**) malloc(0);
+    astRoot->children = NULL;
     char* sep = " ";
     char* word;
     char* brk;
@@ -100,11 +100,11 @@ tree* addChild(tree* parent, char* token) {
     if (parent->num_children > 0) {
         printf("\t\t\tprev child: %s\n", parent->children[parent->num_children-1]->symbol);
     }
-    tree* newElem = (tree*)malloc(sizeof(tree*));
+    tree* newElem = (tree*)malloc(sizeof(tree));
     newElem->symbol = token;
-    newElem->children = (tree**) malloc(0);
+    newElem->children = NULL;
     newElem->num_children = 0;
-    parent->children = realloc(parent->children, (parent->num_children + 1) * sizeof(tree*));
+    parent->children = realloc(parent->children, (parent->num_children + 1) * sizeof(tree));
     parent->children[parent->num_children] = newElem;
     parent->num_children++;
     return newElem;
