@@ -16,16 +16,11 @@ void error(char* message, char* snippet);
  */
 int main(int argc, char** argv)
 {
-    puts("0");
-    printf("i%i\n", argc);
     if(argc == 1)
     {
-        puts("0.1");
         printf("%s", USEAGE);
-        puts("0.2");
         return 1;
     }
-    puts("1");
     parseFile(argv[1]);
 }
 
@@ -47,7 +42,7 @@ void parseFile(char* fileName) {
 }
 
 tree* parseStatement(char* line) {
-    if(line[0] == '/' && line[1] == '/')
+    if(line[0] == '\n' || line[0] == '/' && line[1] == '/')
         return NULL;
     tree* astRoot = malloc(sizeof(struct treenode));
     tree* parent = astRoot;
@@ -57,23 +52,19 @@ tree* parseStatement(char* line) {
     char* word;
     char* brk;
     word = strtok(line, sep);
-    printf("word %s\n", word);
-    assert(word[0] == '(');
+    //assert(word[0] == '(');
     word = strtok(NULL, sep);
-    printf("word %s\n", word);
     astRoot->symbol = word;
     return parseHelper(astRoot, NULL, line, sep, brk);
 }
 
 tree* parseHelper(tree* parent, tree* grandParent, char* line, char* sep, char* brk) {
     char* word = strtok(NULL, sep);
-    printf("word %s\n", word);
     if (word == NULL) {
         return NULL;
     }
     if (word[0] == '(') {
         char* nextWord = strtok(NULL, sep);
-        printf("nextWord %s\n", nextWord);
         tree* ggp = grandParent;
         grandParent = parent;
         parent = addChild(parent, nextWord);
@@ -81,11 +72,9 @@ tree* parseHelper(tree* parent, tree* grandParent, char* line, char* sep, char* 
         parseHelper(grandParent, ggp, line, sep, brk);
         return parent;
     } else if (word[0] == ')') {
-        puts("close path");
         return parent;
     } else {
         // word in table etc. etc.
-        puts("add word");
         addChild(parent, word);
         parseHelper(parent, grandParent, line, sep, brk);
         return parent;
@@ -96,10 +85,6 @@ tree* parseHelper(tree* parent, tree* grandParent, char* line, char* sep, char* 
 }
 
 tree* addChild(tree* parent, char* token) {
-    printf("parent->symbol %s, token %s\n", parent->symbol, token);
-    if (parent->num_children > 0) {
-        printf("\t\t\tprev child: %s\n", parent->children[parent->num_children-1]->symbol);
-    }
     tree* newElem = malloc(sizeof(tree));
     newElem->symbol = token;
     newElem->children = NULL;
@@ -112,5 +97,5 @@ tree* addChild(tree* parent, char* token) {
 
 void error(char* message, char* snippet) {
     printf("%s %s\n", message, snippet);
-    exit(-1);
+    exit(3);
 }
