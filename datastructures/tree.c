@@ -8,7 +8,7 @@ static void treenode_print(struct treenode* node);
 */
 tree* tree_new()
 {
-    tree* newtree = (tree*)malloc(sizeof(struct treenode)); 
+    tree* newtree = malloc(sizeof(struct treenode)); 
     newtree->num_children = 0;
     return newtree;
 }
@@ -20,6 +20,9 @@ tree* tree_new()
 */
 void tree_delete(tree* node)
 {
+    if (node == NULL) {
+        return;
+    }
     for(size_t i = 0; i < node->num_children; i++)
     {
         tree_delete(node->children[i]);
@@ -46,6 +49,10 @@ void tree_walk(tree* node, void func(struct treenode*))
 */
 void tree_print(tree* ast)
 {
+    if (ast == NULL) {
+        puts("tree is null");
+        return;
+    }
     for(size_t i = 0; i < ast->num_children; i++)
     {
         tree_print(ast->children[i]);

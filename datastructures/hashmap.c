@@ -2,15 +2,14 @@
 
 struct _hashnode** _hashtable_init(size_t size)
 {
-    struct _hashnode** table =
-        (struct _hashnode**)malloc(size * sizeof(struct _hashnode*));
+    struct _hashnode** table = malloc(size * sizeof(struct _hashnode*));
     memset(table, 0, size * sizeof(struct _hashnode*));
     return table;
 }
 
 hashmap* hashmap_new()
 {
-    hashmap* map = (hashmap*)malloc(sizeof(hashmap));
+    hashmap* map = malloc(sizeof(hashmap));
     //16 seems like a good initial map size
     map->_buckets = _hashtable_init(16);
     memset(map->_buckets, 0, sizeof(struct _hashnode*) * 16);
@@ -52,12 +51,11 @@ void hashmap_addVal(hashmap* map, char* key, void* val)
     {
         _hashmap_resize(map, hashmap_numElems(map) * 2);
     }
-    struct _hashnode* newnode =
-        (struct _hashnode*)malloc(sizeof(struct _hashnode));
+    struct _hashnode* newnode = malloc(sizeof(struct _hashnode));
     newnode->next = NULL;
     //The key provided may not be on the heap and may be freed elsewhere
     //FIXME I should use strnlen
-    char* newKey = (char*)malloc(sizeof(char*)*strlen(key));
+    char* newKey = malloc(sizeof(char*)*strlen(key));
     //FIXME I should use strncpy
     strcpy(newKey, key);
     newnode->val = val;

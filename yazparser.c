@@ -49,7 +49,7 @@ void parseFile(char* fileName) {
 tree* parseStatement(char* line) {
     if(line[0] == '/' && line[1] == '/')
         return NULL;
-    tree* astRoot = (tree*) malloc(sizeof(struct treenode));
+    tree* astRoot = malloc(sizeof(struct treenode));
     tree* parent = astRoot;
     astRoot->num_children = 0;
     astRoot->children = NULL;
@@ -100,7 +100,7 @@ tree* addChild(tree* parent, char* token) {
     if (parent->num_children > 0) {
         printf("\t\t\tprev child: %s\n", parent->children[parent->num_children-1]->symbol);
     }
-    tree* newElem = (tree*)malloc(sizeof(tree));
+    tree* newElem = malloc(sizeof(tree));
     newElem->symbol = token;
     newElem->children = NULL;
     newElem->num_children = 0;
