@@ -47,38 +47,40 @@ tree* parseStatement(char* line) {
     tree* astRoot = (tree*) malloc(sizeof(struct treenode));
     tree* parent = astRoot;
     astRoot->num_children = 0;
-    astRoot->children = NULL;
+    astRoot->children = (tree**) malloc(0);
     char* sep = " ";
     char* word;
     char* brk;
-    word = strtok_r(line, sep, &brk);
+    word = strtok(line, sep);
     printf("word %s\n", word);
     assert(word[0] == '(');
-    word = strtok_r(NULL, sep, &brk);
+    word = strtok(NULL, sep);
     printf("word %s\n", word);
     astRoot->symbol = word;
     return parseHelper(astRoot, NULL, line, sep, brk);
 }
 
 tree* parseHelper(tree* parent, tree* grandParent, char* line, char* sep, char* brk) {
-    char* word = strtok_r(NULL, sep, &brk);
+    char* word = strtok(NULL, sep);
     printf("word %s\n", word);
     if (word == NULL) {
         return NULL;
     }
     if (word[0] == '(') {
-        char* nextWord = strtok_r(NULL, sep, &brk);
+        char* nextWord = strtok(NULL, sep);
+        printf("nextWord %s\n", nextWord);
         tree* ggp = grandParent;
         grandParent = parent;
-        puts("opend again");
         parent = addChild(parent, nextWord);
         parseHelper(parent, grandParent, line, sep, brk);
         parseHelper(grandParent, ggp, line, sep, brk);
         return parent;
     } else if (word[0] == ')') {
+        puts("close path");
         return parent;
     } else {
         // word in table etc. etc.
+        puts("add word");
         addChild(parent, word);
         parseHelper(parent, grandParent, line, sep, brk);
         return parent;
@@ -89,9 +91,13 @@ tree* parseHelper(tree* parent, tree* grandParent, char* line, char* sep, char* 
 }
 
 tree* addChild(tree* parent, char* token) {
+    printf("parent->symbol %s, token %s\n", parent->symbol, token);
+    if (parent->num_children > 0) {
+        printf("\t\t\tprev child: %s\n", parent->children[parent->num_children-1]->symbol);
+    }
     tree* newElem = (tree*)malloc(sizeof(tree*));
     newElem->symbol = token;
-    newElem->children = NULL;
+    newElem->children = (tree**) malloc(0);
     newElem->num_children = 0;
     parent->children = realloc(parent->children, (parent->num_children + 1) * sizeof(tree*));
     parent->children[parent->num_children] = newElem;
