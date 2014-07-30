@@ -36,11 +36,15 @@ void tree_delete(tree* node)
 */
 void tree_walk(tree* node, void func(struct treenode*))
 {
+    if (node == NULL) {
+        puts("tree is null");
+        return;
+    }
+    func(node);
     for(size_t i = 0; i < node->num_children; i++)
     {
         func(node->children[i]);
     }
-    func(node);  
 }
 
 
@@ -49,20 +53,14 @@ void tree_walk(tree* node, void func(struct treenode*))
 */
 void tree_print(tree* ast)
 {
-    if (ast == NULL) {
-        puts("tree is null");
-        return;
-    }
-    for(size_t i = 0; i < ast->num_children; i++)
-    {
-        tree_print(ast->children[i]);
-    }
-    printf("%s\n", ast->symbol);
+    printf("%s", "(");
+    tree_walk(ast, treenode_print);
+    printf("%s\n", ")");
 }
 
 /** A static helper function for tree_print.
 */
 static void treenode_print(struct treenode* node)
 {
-    printf("Node: %s\n", node->symbol);
+    printf(" %s ", node->symbol);
 }
