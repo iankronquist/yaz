@@ -31,6 +31,10 @@ int main(int argc, char** argv)
 
 void parseFile(char* fileName) {
     FILE* file = fopen(fileName, "r");
+    if (file == NULL) {
+        error("Error: couldn't open file ", fileName);
+        return;
+    }
     char* line = NULL;
     size_t line_capacity = 0;
     ssize_t line_length = 0;
@@ -39,6 +43,7 @@ void parseFile(char* fileName) {
         tree_print(ast);
         //tree_delete(ast);
     }
+    fclose(file);
 }
 
 tree* parseStatement(char* line) {
