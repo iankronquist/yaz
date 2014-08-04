@@ -42,7 +42,7 @@ void parseFile(char* fileName) {
 }
 
 tree* parseStatement(char* line) {
-    if(line[0] == '\n' || line[0] == '/' && line[1] == '/')
+    if(line[0] == '\n' || (line[0] == '/' && line[1] == '/'))
         return NULL;
     tree* astRoot = malloc(sizeof(struct treenode));
     tree* parent = astRoot;
@@ -50,7 +50,7 @@ tree* parseStatement(char* line) {
     astRoot->children = NULL;
     char* sep = " ";
     char* word;
-    char* brk;
+    char* brk = NULL;
     word = strtok(line, sep);
     //assert(word[0] == '(');
     word = strtok(NULL, sep);
