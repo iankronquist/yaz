@@ -3,7 +3,8 @@
 const char* USEAGE = "Useage:\nyaz filename\n";
 static void _error(char* message, char* snippet);
 
-/*
+
+/** Entry point for the parser. TODO: Move to own file
    Program return values:
  * 0: exited successfully
  * 1: invalid arguments
@@ -20,6 +21,11 @@ int main(int argc, char** argv)
     parseFile(argv[1]);
 }
 
+
+/** Open the provided `fileName` and parse it line by line. 
+    TODO: pass generated asts to an interpreter. Store functions in a table
+    to be reused later.
+*/
 void parseFile(char* fileName) {
     FILE* file = fopen(fileName, "r");
     if (file == NULL) {
@@ -37,6 +43,10 @@ void parseFile(char* fileName) {
     fclose(file);
 }
 
+
+/** Return an abstract syntax tree representing the statement in `line`.
+    Uses recursive `parseHelper` to add children.
+*/
 tree* parseStatement(char* line) {
     if(line[0] == '\n' || (line[0] == '/' && line[1] == '/'))
         return NULL;
@@ -52,6 +62,12 @@ tree* parseStatement(char* line) {
     return astRoot;
 }
 
+
+/** Recursive helper to add children to the `parent` tree and add subtrees.
+    `parent` is the tree to attach childrent to. `sep` is the separator used by
+    strtok to split tokens. It is a " ".
+
+*/
 void parseHelper(tree* parent, char* line, char* sep) {
     char* word = strtok(NULL, sep);
     // If the word it NULL then we've run out of words to process
@@ -82,6 +98,11 @@ void parseHelper(tree* parent, char* line, char* sep) {
     assert(0);
 }
 
+
+/** Report parse time errors. Calls exit and terminates the program.
+    `message` is the message to display describing the error. `snippet` is
+    possibly the snippet of code where the error occurred.
+*/
 static void _error(char* message, char* snippet) {
     printf("%s %s\n", message, snippet);
     exit(3);
