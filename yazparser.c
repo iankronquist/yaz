@@ -1,11 +1,7 @@
 #include "yazparser.h"
 
 const char* USEAGE = "Useage:\nyaz filename\n";
-void read_file_by_lines(char* filename);
-void extend_children_list(struct treenode* parent,
-        struct treenode* newchild);
-struct treenode* add_ast(struct treenode* parent);
-void error(char* message, char* snippet);
+static void _error(char* message, char* snippet);
 
 /*
    Program return values:
@@ -27,7 +23,7 @@ int main(int argc, char** argv)
 void parseFile(char* fileName) {
     FILE* file = fopen(fileName, "r");
     if (file == NULL) {
-        error("Error: couldn't open file ", fileName);
+        _error("Error: couldn't open file ", fileName);
         return;
     }
     char* line = NULL;
@@ -50,7 +46,6 @@ tree* parseStatement(char* line) {
     char* sep = " ";
     char* word;
     word = strtok(line, sep);
-    //assert(word[0] == '(');
     word = strtok(NULL, sep);
     astRoot->symbol = word;
     parseHelper(astRoot, line, sep);
@@ -59,6 +54,7 @@ tree* parseStatement(char* line) {
 
 void parseHelper(tree* parent, char* line, char* sep) {
     char* word = strtok(NULL, sep);
+    // If the word it NULL then we've run out of words to process
     if (word == NULL) {
         return;
     } else if (word[0] == '(') {
@@ -75,9 +71,10 @@ void parseHelper(tree* parent, char* line, char* sep) {
         parseHelper(parent, line, sep);
         return;
     } else if (word[0] == ')') {
+        // We've finished parsing this subtree
         return;
     } else {
-        // word in table etc. etc.
+        // 
         tree_add_child(parent, word);
         parseHelper(parent, line, sep);
         return;
@@ -85,7 +82,7 @@ void parseHelper(tree* parent, char* line, char* sep) {
     assert(0);
 }
 
-void error(char* message, char* snippet) {
+static void _error(char* message, char* snippet) {
     printf("%s %s\n", message, snippet);
     exit(3);
 }

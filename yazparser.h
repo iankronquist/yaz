@@ -6,20 +6,14 @@
 
 hashmap* symbol_table;
 hashmap* function_table;
-void read_file_by_lines(char* filename);
-tree* build_ast(char* line);
-void add_token_to_tree(char* token);
+/** NOT IMPLEMENTED */
 void execute_statement(tree* statement);
+/** NOT IMPLEMENTED */
 void execute_function(void* arguments, size_t num_args, char* function_symbol);
-void cleanup();
-void exit_with_message(char* message);
+
 void parseFile(char* fileName);
 tree* parseStatement(char* line);
-void addTokenToTree(tree* astParent, char* token, size_t tokenLength);
-void addSubTreeToTree(tree* astParent, tree* subTree);
-tree* parseStatement(char* line);
 void parseHelper(tree* parent, char* line, char* sep);
-tree* addChild(tree* parent, char* token);
 
 
 struct function {
