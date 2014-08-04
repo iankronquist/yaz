@@ -31,7 +31,7 @@ tree* tree_add_child(tree* parent, char* symbol) {
 }
 
 
-/** Recursively free all descendants of the `node`.
+/** Recursively free `node` and all descendants of the `node`.
     Note that this will not free the *values* of those nodes - those must be
     freed separately, perhaps using a helper function and `tree_walk`.
 */
@@ -49,8 +49,8 @@ void tree_delete(tree* node)
 
 
 /**
-    Apply some function to each node of the tree starting with
-    the provided `node`.
+    Apply some function to each node of the tree
+    starting with the provided `node`.
 */
 void tree_walk(tree* node, void func(struct treenode*))
 {
@@ -66,7 +66,8 @@ void tree_walk(tree* node, void func(struct treenode*))
     }
 }
 
-/** Prints the current tree. Prints the symbol of every `treenode`.
+/** Prints the tree to standar out.
+    Prints the symbol of every `treenode`.
     Uses `tree_walk` and `treenode_print`, a static helper function.
 */
 void tree_print(tree* node)
@@ -91,11 +92,4 @@ void _tree_print_helper(tree* node) {
         _tree_print_helper(node->children[i]);
     }
     printf("%s", ")");
-}
-
-
-/** A helper function for tree_print. */
-void treenode_print(struct treenode* node)
-{
-    printf(" %s ", node->symbol);
 }
