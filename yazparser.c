@@ -53,33 +53,36 @@ tree* parseStatement(char* line) {
     //assert(word[0] == '(');
     word = strtok(NULL, sep);
     astRoot->symbol = word;
-    return parseHelper(astRoot, NULL, line, sep);
+    parseHelper(astRoot, line, sep);
+    return astRoot;
 }
 
-tree* parseHelper(tree* parent, tree* grandParent, char* line, char* sep) {
+void parseHelper(tree* parent, char* line, char* sep) {
     char* word = strtok(NULL, sep);
     if (word == NULL) {
-        return NULL;
-    }
-    if (word[0] == '(') {
+        return;
+    } else if (word[0] == '(') {
+        // Get the verb for this sub tree
         char* nextWord = strtok(NULL, sep);
-        tree* ggp = grandParent;
-        grandParent = parent;
-        parent = tree_add_child(parent, nextWord);
-        parseHelper(parent, grandParent, line, sep);
-        parseHelper(grandParent, ggp, line, sep);
-        return parent;
+        // Add the verb to the tree and get the root of the subtree
+        // that is the structure represented by the verb
+        tree* sub_tree = tree_add_child(parent, nextWord);
+        // Continue parsing for the sub tree
+        parseHelper(sub_tree, line, sep);
+        // When that function returns there was either a newline or a closing
+        // paren. In the latter case we need to continue parsing the higher
+        // part of the tree
+        parseHelper(parent, line, sep);
+        return;
     } else if (word[0] == ')') {
-        return parent;
+        return;
     } else {
         // word in table etc. etc.
         tree_add_child(parent, word);
-        parseHelper(parent, grandParent, line, sep);
-        return parent;
+        parseHelper(parent, line, sep);
+        return;
     }
     assert(0);
-    //silence errors
-    return NULL;
 }
 
 void error(char* message, char* snippet) {
