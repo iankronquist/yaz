@@ -67,7 +67,7 @@ tree* parseHelper(tree* parent, tree* grandParent, char* line, char* sep, char* 
         char* nextWord = strtok(NULL, sep);
         tree* ggp = grandParent;
         grandParent = parent;
-        parent = addChild(parent, nextWord);
+        parent = tree_add_child(parent, nextWord);
         parseHelper(parent, grandParent, line, sep, brk);
         parseHelper(grandParent, ggp, line, sep, brk);
         return parent;
@@ -75,24 +75,13 @@ tree* parseHelper(tree* parent, tree* grandParent, char* line, char* sep, char* 
         return parent;
     } else {
         // word in table etc. etc.
-        addChild(parent, word);
+        tree_add_child(parent, word);
         parseHelper(parent, grandParent, line, sep, brk);
         return parent;
     }
     assert(0);
     //silence errors
     return NULL;
-}
-
-tree* addChild(tree* parent, char* token) {
-    tree* newElem = malloc(sizeof(tree));
-    newElem->symbol = token;
-    newElem->children = NULL;
-    newElem->num_children = 0;
-    parent->children = realloc(parent->children, (parent->num_children + 1) * sizeof(tree));
-    parent->children[parent->num_children] = newElem;
-    parent->num_children++;
-    return newElem;
 }
 
 void error(char* message, char* snippet) {
