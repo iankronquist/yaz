@@ -1,5 +1,7 @@
 #include "tree.h"
 
+/** Recursion helper for accurately formatting the tree. */
+void _tree_print_helper(tree* node);
 
 /** Create a new tree with no children.
     *Note:* Does not allocate the tree's `children` member. Those can be
@@ -53,30 +55,46 @@ void tree_delete(tree* node)
 void tree_walk(tree* node, void func(struct treenode*))
 {
     if (node == NULL) {
-        puts("tree is null");
+        printf("%s", "tree is null");
         return;
     }
     func(node);
+    //printf(":#children(%zu)", node->num_children);
     for(size_t i = 0; i < node->num_children; i++)
     {
-        func(node->children[i]);
+        tree_walk(node->children[i], func);
     }
 }
-
 
 /** Prints the current tree. Prints the symbol of every `treenode`.
     Uses `tree_walk` and `treenode_print`, a static helper function.
 */
-void tree_print(tree* ast)
+void tree_print(tree* node)
 {
+    if (node == NULL) {
+        printf("%s\n", "tree is null");
+        return;
+    }
     printf("%s", "(");
-    tree_walk(ast, treenode_print);
-    printf("%s\n", ")");
+    _tree_print_helper(node);
+    printf("%s", ")\n");
+}
+
+void _tree_print_helper(tree* node) {
+    printf(" %s ", node->symbol);
+    if (node->num_children == 0) {
+        return;
+    }
+    printf("%s", "(");
+    for(size_t i = 0; i < node->num_children; i++)
+    {
+        _tree_print_helper(node->children[i]);
+    }
+    printf("%s", ")");
 }
 
 
-/** A helper function for tree_print.
-*/
+/** A helper function for tree_print. */
 void treenode_print(struct treenode* node)
 {
     printf(" %s ", node->symbol);
