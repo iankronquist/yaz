@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "hashmap.h"
+#include "../datastructures/hashmap.h"
 #include "tests.h"
 
 void test_hashmap_new();
