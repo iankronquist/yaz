@@ -25,6 +25,7 @@ tree_tests: tree
 
 build:
 	mkdir build
+	mkdir tests/bin
 
 tests: tree_tests hashmap_tests
 
