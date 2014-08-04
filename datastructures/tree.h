@@ -12,4 +12,6 @@ typedef struct treenode tree;
 tree* tree_new();
 void tree_delete(tree*);
 void tree_walk(tree*, void func(struct treenode*));
+tree* tree_add_child(tree* parent, char* token);
 void tree_print(tree*);
+void treenode_print(struct treenode* node);

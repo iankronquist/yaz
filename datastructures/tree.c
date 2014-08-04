@@ -1,6 +1,5 @@
 #include "tree.h"
 
-static void treenode_print(struct treenode* node);
 
 /** Create a new tree with no children.
     *Note:* Does not allocate the tree's `children` member. Those can be
@@ -11,6 +10,22 @@ tree* tree_new()
     tree* newtree = malloc(sizeof(struct treenode)); 
     newtree->num_children = 0;
     return newtree;
+}
+
+
+/** Add a new child to `parent`. Returns the new child.
+    Note that this will realloc the children array.
+*/
+tree* tree_add_child(tree* parent, char* symbol) {
+    tree* newElem = malloc(sizeof(tree));
+    newElem->symbol = symbol;
+    newElem->children = NULL;
+    newElem->num_children = 0;
+    parent->children = realloc(parent->children, (parent->num_children + 1) *
+        sizeof(tree));
+    parent->children[parent->num_children] = newElem;
+    parent->num_children++;
+    return newElem;
 }
 
 
@@ -29,6 +44,7 @@ void tree_delete(tree* node)
     }
     free(node);
 }
+
 
 /**
     Apply some function to each node of the tree starting with
@@ -58,9 +74,10 @@ void tree_print(tree* ast)
     printf("%s\n", ")");
 }
 
-/** A static helper function for tree_print.
+
+/** A helper function for tree_print.
 */
-static void treenode_print(struct treenode* node)
+void treenode_print(struct treenode* node)
 {
     printf(" %s ", node->symbol);
 }
