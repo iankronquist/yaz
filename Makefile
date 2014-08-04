@@ -35,4 +35,4 @@ clean:
 	rm -rf build
 	rm -f yaz
 	rm -rf docs
-	rm -rf tests/bin
+	rm -rf tests/bin/*
