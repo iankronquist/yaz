@@ -2,6 +2,7 @@
 
 const char* USEAGE = "Useage:\nyaz filename\n";
 static void _error(char* message, char* snippet);
+static void _parseHelper(tree* parent, char* sep);
 
 
 /** Entry point for the parser. TODO: Move to own file
@@ -58,7 +59,7 @@ tree* parseStatement(char* line) {
     word = strtok(line, sep);
     word = strtok(NULL, sep);
     astRoot->symbol = word;
-    parseHelper(astRoot, line, sep);
+    _parseHelper(astRoot, sep);
     return astRoot;
 }
 
@@ -68,7 +69,7 @@ tree* parseStatement(char* line) {
     strtok to split tokens. It is a " ".
 
 */
-void parseHelper(tree* parent, char* line, char* sep) {
+static void _parseHelper(tree* parent, char* sep) {
     char* word = strtok(NULL, sep);
     // If the word it NULL then we've run out of words to process
     if (word == NULL) {
@@ -80,11 +81,11 @@ void parseHelper(tree* parent, char* line, char* sep) {
         // that is the structure represented by the verb
         tree* sub_tree = tree_add_child(parent, nextWord);
         // Continue parsing for the sub tree
-        parseHelper(sub_tree, line, sep);
+        _parseHelper(sub_tree, sep);
         // When that function returns there was either a newline or a closing
         // paren. In the latter case we need to continue parsing the higher
         // part of the tree
-        parseHelper(parent, line, sep);
+        _parseHelper(parent, sep);
         return;
     } else if (word[0] == ')') {
         // We've finished parsing this subtree
@@ -92,7 +93,7 @@ void parseHelper(tree* parent, char* line, char* sep) {
     } else {
         // 
         tree_add_child(parent, word);
-        parseHelper(parent, line, sep);
+        _parseHelper(parent, sep);
         return;
     }
     assert(0);

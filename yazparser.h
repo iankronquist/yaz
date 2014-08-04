@@ -13,7 +13,6 @@ void execute_function(void* arguments, size_t num_args, char* function_symbol);
 
 void parseFile(char* fileName);
 tree* parseStatement(char* line);
-void parseHelper(tree* parent, char* line, char* sep);
 
 
 struct function {
