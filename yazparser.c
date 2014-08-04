@@ -45,20 +45,18 @@ tree* parseStatement(char* line) {
     if(line[0] == '\n' || (line[0] == '/' && line[1] == '/'))
         return NULL;
     tree* astRoot = malloc(sizeof(struct treenode));
-    tree* parent = astRoot;
     astRoot->num_children = 0;
     astRoot->children = NULL;
     char* sep = " ";
     char* word;
-    char* brk = NULL;
     word = strtok(line, sep);
     //assert(word[0] == '(');
     word = strtok(NULL, sep);
     astRoot->symbol = word;
-    return parseHelper(astRoot, NULL, line, sep, brk);
+    return parseHelper(astRoot, NULL, line, sep);
 }
 
-tree* parseHelper(tree* parent, tree* grandParent, char* line, char* sep, char* brk) {
+tree* parseHelper(tree* parent, tree* grandParent, char* line, char* sep) {
     char* word = strtok(NULL, sep);
     if (word == NULL) {
         return NULL;
@@ -68,15 +66,15 @@ tree* parseHelper(tree* parent, tree* grandParent, char* line, char* sep, char* 
         tree* ggp = grandParent;
         grandParent = parent;
         parent = tree_add_child(parent, nextWord);
-        parseHelper(parent, grandParent, line, sep, brk);
-        parseHelper(grandParent, ggp, line, sep, brk);
+        parseHelper(parent, grandParent, line, sep);
+        parseHelper(grandParent, ggp, line, sep);
         return parent;
     } else if (word[0] == ')') {
         return parent;
     } else {
         // word in table etc. etc.
         tree_add_child(parent, word);
-        parseHelper(parent, grandParent, line, sep, brk);
+        parseHelper(parent, grandParent, line, sep);
         return parent;
     }
     assert(0);

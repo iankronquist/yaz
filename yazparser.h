@@ -18,7 +18,7 @@ tree* parseStatement(char* line);
 void addTokenToTree(tree* astParent, char* token, size_t tokenLength);
 void addSubTreeToTree(tree* astParent, tree* subTree);
 tree* parseStatement(char* line);
-tree* parseHelper(tree* parent, tree* grandParent, char* line, char* sep, char* brk);
+tree* parseHelper(tree* parent, tree* grandParent, char* line, char* sep);
 tree* addChild(tree* parent, char* token);
 
 
