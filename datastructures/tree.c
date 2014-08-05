@@ -4,13 +4,18 @@
 void _tree_print_helper(tree* node);
 
 /** Create a new tree with no children.
+    The tree's `symbol` will be `root_symbol`.
     *Note:* Does not allocate the tree's `children` member. Those can be
     allocated later
 */
-tree* tree_new()
+tree* tree_new(char* root_symbol)
 {
     tree* newtree = malloc(sizeof(struct treenode)); 
+    newtree->symbol = root_symbol;
+    // Most functions will have few children
+    newtree->child_slots = 4;
     newtree->num_children = 0;
+    newtree->children = malloc(newtree->child_slots * sizeof(tree*));
     return newtree;
 }
 
@@ -19,12 +24,12 @@ tree* tree_new()
     Note that this will realloc the children array.
 */
 tree* tree_add_child(tree* parent, char* symbol) {
-    tree* newElem = malloc(sizeof(tree));
-    newElem->symbol = symbol;
-    newElem->children = NULL;
-    newElem->num_children = 0;
-    parent->children = realloc(parent->children, (parent->num_children + 1) *
-        sizeof(tree*));
+    tree* newElem = tree_new(symbol);
+    if (parent->child_slots == parent->num_children) {
+        parent->child_slots *= 2;
+        parent->children = realloc(parent->children, parent->child_slots *
+            sizeof(tree*));
+    }
     parent->children[parent->num_children] = newElem;
     parent->num_children++;
     return newElem;
