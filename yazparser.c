@@ -41,6 +41,7 @@ void parseFile(char* fileName) {
         tree_print(ast);
         tree_delete(ast);
     }
+    free(line);
     fclose(file);
 }
 
