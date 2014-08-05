@@ -24,7 +24,7 @@ tree* tree_add_child(tree* parent, char* symbol) {
     newElem->children = NULL;
     newElem->num_children = 0;
     parent->children = realloc(parent->children, (parent->num_children + 1) *
-        sizeof(tree));
+        sizeof(tree*));
     parent->children[parent->num_children] = newElem;
     parent->num_children++;
     return newElem;
@@ -44,12 +44,12 @@ void tree_delete(tree* node)
     {
         tree_delete(node->children[i]);
     }
+    free(node->children);
     free(node);
 }
 
 
-/**
-    Apply some function to each node of the tree
+/** Apply some function to each node of the tree
     starting with the provided `node`.
 */
 void tree_walk(tree* node, void func(struct treenode*))
