@@ -52,14 +52,11 @@ void parseFile(char* fileName) {
 tree* parseStatement(char* line) {
     if(line[0] == '\n' || (line[0] == '/' && line[1] == '/'))
         return NULL;
-    tree* astRoot = malloc(sizeof(struct treenode));
-    astRoot->num_children = 0;
-    astRoot->children = NULL;
     char* sep = " ";
     char* word;
     word = strtok(line, sep);
     word = strtok(NULL, sep);
-    astRoot->symbol = word;
+    tree* astRoot = tree_new(word);
     _parseHelper(astRoot, sep);
     return astRoot;
 }
