@@ -59,14 +59,13 @@ void tree_walk(tree* node, void func(struct treenode*))
         return;
     }
     func(node);
-    //printf(":#children(%zu)", node->num_children);
     for(size_t i = 0; i < node->num_children; i++)
     {
         tree_walk(node->children[i], func);
     }
 }
 
-/** Prints the tree to standar out.
+/** Prints the tree to standard out.
     Prints the symbol of every `treenode`.
     Uses `tree_walk` and `treenode_print`, a static helper function.
 */
