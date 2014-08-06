@@ -17,7 +17,7 @@ The following are the types in yaz:
 */
 
 
-enum type {
+enum types {
     int_t,
     _list_t,
     string_t,
@@ -28,7 +28,7 @@ enum type {
 
 
 struct base_type {
-    enum type;
+    enum types type;
 };
 
 
@@ -45,33 +45,33 @@ struct int_type {
 };
 
 
-static struct _list_t {
-    enum type;
+struct _list_t {
+    enum types type;
     size_t length;
-}
+};
 
 
 struct func_t {
-    _list_t list;
+    struct _list_t list;
     struct funct_t* statements;
 };
 
 
 struct string_type {
-    _list_t list;
+    struct _list_t list;
     char* data;
 };
 
 
 struct array_type {
-    _list_t list;
-    enum inner_type;
+    struct _list_t list;
+    enum types inner_type;
     void* data;
 };
 
 
 struct poly_array_t {
-    _list_t list;
+    struct _list_t list;
     void* data;
 };
 
