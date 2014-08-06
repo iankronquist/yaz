@@ -8,10 +8,10 @@ void _tree_print_helper(tree* node);
     *Note:* Does not allocate the tree's `children` member. Those can be
     allocated later
 */
-tree* tree_new(char* root_symbol)
+tree* tree_new(struct base_type* root_obj)
 {
     tree* newtree = malloc(sizeof(struct treenode)); 
-    newtree->symbol = root_symbol;
+    newtree->type = root_obj;
     // Most functions will have few children
     newtree->child_slots = 4;
     newtree->num_children = 0;
@@ -23,8 +23,8 @@ tree* tree_new(char* root_symbol)
 /** Add a new child to `parent`. Returns the new child.
     Note that this will realloc the children array.
 */
-tree* tree_add_child(tree* parent, char* symbol) {
-    tree* newElem = tree_new(symbol);
+tree* tree_add_child(tree* parent, struct base_type* child_obj) {
+    tree* newElem = tree_new(child_obj);
     if (parent->child_slots == parent->num_children) {
         parent->child_slots *= 2;
         parent->children = realloc(parent->children, parent->child_slots *
@@ -86,7 +86,7 @@ void tree_print(tree* node)
 }
 
 void _tree_print_helper(tree* node) {
-    printf(" %s ", node->symbol);
+    printf(" %s ", node->type);
     if (node->num_children == 0) {
         return;
     }
