@@ -19,6 +19,7 @@ The following are the types in yaz:
 
 enum types {
     int_t,
+    bool_t,
     _list_t,
     string_t,
     array_t,
