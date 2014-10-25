@@ -1,6 +1,7 @@
 #include "lexer.h"
 
 // TODO: use strtok?
+// TODO: test this
 struct token_list* get_tok(char* buffer, size_t buffer_len) {
     // This is a special buffer. It should always end in ' ' so we don't
     // overshoot when parsing the last token
