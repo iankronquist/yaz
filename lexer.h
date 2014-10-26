@@ -44,6 +44,8 @@ bool is_string(char *test_str);
 bool is_func(char *test_str);
 bool is_num(char *test_str);
 struct token_list* make_token_list();
+struct token *pop_token_list(struct token_list* tkl);
+struct token *peek_token_list(struct token_list* tkl);
 void append_token_list(struct token_list* tk_list, struct token* new_token);
 void destroy_token_list(struct token_list *tk_list);
 #endif

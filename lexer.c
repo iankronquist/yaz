@@ -118,6 +118,23 @@ struct token_list* make_token_list() {
     return new_list;
 }
 
+struct token* pop_token_list(struct token_list* tk_list) {
+    struct token *cur = tk_list->head;
+    if (cur != NULL) {
+        tk_list->head = tk_list->head->next_token;
+    }
+    return cur;
+}
+
+struct token* peek_token_list(struct token_list* tk_list) {
+    struct token *cur = tk_list->head;
+    if (cur != NULL) {
+        return tk_list->head->next_token;
+    } else {
+        return NULL;
+    }
+}
+
 void append_token_list(struct token_list* tk_list, struct token* new_token) {
     if (tk_list->head == NULL) {
         tk_list->head = new_token;
