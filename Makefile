@@ -10,6 +10,12 @@ lexer:  build
 test_lexer: lexer build
 	$(CC) lexer_tests.c build/lexer.o -o tests/bin/lexer_tests $(CFLAGS) 
 
+ast: build lexer
+	$(CC) -c ast.c build/lexer.o -o build/ast.o $(CFLAGS)
+
+test_ast: ast build
+	$(CC) ast_tests.c build/lexer.o build/ast.o -o tests/bin/ast_tests $(CFLAGS)
+
 parser:  build
 	$(CC) -c parser.c -o build/parser.o $(CFLAGS)
 
