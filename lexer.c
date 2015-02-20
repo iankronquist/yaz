@@ -1,157 +1,134 @@
 #include "lexer.h"
 
-// TODO: use strtok?
-// TODO: test this
+void panic(const char* message, char* context) {
+    printf("Lexing error: %s %s", message, context);
+    exit(-1);
+}
+
 struct token_list* get_tok(char* buffer, size_t buffer_len) {
-    // This is a special buffer. It should always end in ' ' so we don't
-    // overshoot when parsing the last token
-    assert(buffer[buffer_len] == ' ');
     struct token_list* tk_list = make_token_list();
-    struct token *new_tok;
-    char* token_begin = 0;
-    for (size_t i = 0; i < buffer_len; i++) {
-        // If we find whitespace, generate a new token
-        if (buffer[i] == ' ') {
-            // Token strings should end in \0
-            buffer[i] = '\0';
-            
-            // TODO: test for strings!
-            if (token_begin[0] == '#') { //if it's a comment, skip to the next line
-                return tk_list;
-            }
-            // Generate the new token and append it to the token list
-            new_tok = gen_tok(token_begin);
-            if (new_tok != NULL)
-                append_token_list(tk_list, new_tok);
-            // the next token will begin after this
-            token_begin = buffer + i + 1;
+    char* token_begin = buffer;
+    char* token_end = NULL;
+    lex_state state = UNKNOWN;
+    for (size_t index = 0; index < buffer_len; index++) {
+        switch (state) {
+            case UNKNOWN:
+                token_begin = &buffer[index];
+                if (isalpha(buffer[index]) || buffer[index] == '_') {
+                    state = IDENT;
+                } else if (isdigit(buffer[index])) {
+                    state = IDENT;
+                } else if (buffer[index] == '"') {
+                    state = STR;
+                } else if (buffer[index] != ' ') {
+                    state = SYMBOL;
+                }
+                break;
+            case IDENT:
+                if (!isalnum(buffer[index]) && !buffer[index] == '_') {
+                    token_end = &buffer[index];
+                    append_token_list(tk_list, mint_ident(token_begin, token_end));
+                    state = UNKNOWN;
+                }
+                break;
+            case INT:
+                if (buffer[index] == '.') {
+                    state = DBL;
+                } else if (!isdigit(buffer[index])) {
+                    state = UNKNOWN;
+                    token_end = &buffer[index];
+                    append_token_list(tk_list, mint_int(token_begin, token_end));
+                }
+            case DBL:
+                if (!isdigit(buffer[index])) {
+                    state = UNKNOWN;
+                    token_end = &buffer[index];
+                    append_token_list(tk_list, mint_dbl(token_begin, token_end));
+                }
+            case STR:
+                if (&buffer[index] == buffer) {
+                    panic("Lines can't start with a string", buffer);
+                }
+                if (buffer[index] == '"' && buffer[index-1] != '\\') {
+                    state = UNKNOWN;
+                    token_end = &buffer[index];
+                    append_token_list(tk_list, mint_str(token_begin, token_end));
+                }
+            case SYMBOL:
+                if (isalnum(buffer[index]) || buffer[index] == '_') {
+                    state = UNKNOWN;
+                    token_end = &buffer[index];
+                    append_token_list(tk_list, mint_symbol(token_begin, token_end));
+                }
         }
     }
     return tk_list;
 }
 
-struct token* gen_tok(char* new_token) {
-    // If the new token string is empty, don't generate a token.
-    if (new_token[0] == '\0') {
-        return NULL;
-    }
-    struct token *tk = malloc(sizeof(struct token));
-    tk->next_token = NULL;
-    if (is_num(new_token)) {
-        tk->type = tok_number;
-        tk->value.dbl = strtod(new_token, NULL);
-        return tk;
-    } else if (is_string(new_token)) { // TODO: This was a terrible idea
-        tk->type = tok_string;
-        tk->value.string = malloc(strlen(new_token));
-        strcpy(tk->value.string, new_token);
-        return tk;
-    } else if (is_func(new_token)) {
-        tk->type = tok_extern; 
-    } else if (is_extern(new_token)) {
-        tk->type = tok_identifier;
-    } else if (is_identifier(new_token)) {
-        tk->type = tok_identifier;
-        tk->value.string = malloc(strlen(new_token));
-        strcpy(tk->value.string, new_token);
-    } else if (new_token[1] == '\0') { // it must be punctuation
-        tk->type = tok_identifier;
-        tk->value.string = malloc(2);
-        tk->value.string[0] = new_token[0];
-        tk->value.string[1] = '\0';
+struct token* mint_ident(char *token_begin, char *token_end) {
+    assert(token_end > token_begin);
+    size_t len = token_begin - token_end;
+    struct token* tk = malloc(sizeof(struct token));
+    // + 1 for null byte
+    char *receptacle = malloc(len + 1);
+    if (strncmp(receptacle, "extern", 6)) {
+        tk->type = tok_extern;
+        tk->next_token = NULL;
+    } else if (strncmp(receptacle, "def", 3)) {
+        tk->type = tok_def;
+        tk->next_token = NULL;
     } else {
-        printf("Invalid token %s!\n", new_token);
-        exit(-1);
+        tk->type = tok_identifier;
+        tk->next_token = NULL;
+        strncpy(receptacle, token_begin, len);
+        tk->value.string = receptacle;
     }
     return tk;
 }
 
-// TODO: handle _,-?
-bool is_identifier(char *test_str) {
-    for (size_t i = 0; test_str[i] != '\0'; i++) {
-        if (!(isalnum(test_str[i]))) {
-            return false;
-        }
-    }
-    return true;
+struct token* mint_int(char *token_begin, char *token_end) {
+    assert(token_end > token_begin);
+    struct token* tk = malloc(sizeof(struct token));
+    tk->next_token = NULL;
+    tk->type = tok_number;
+    tk->value.num = strtol(token_begin, NULL, 10);
+    return tk;
 }
 
-bool is_extern(char *test_str) {
-    if (strcmp(test_str, "extern") != 0) {
-        return false;
-    }
-    return true;
+struct token* mint_dbl(char *token_begin, char *token_end) {
+    assert(token_end > token_begin);
+    struct token* tk = malloc(sizeof(struct token));
+    tk->next_token = NULL;
+    tk->type = tok_dbl;
+    tk->value.dbl = atof(token_begin);
+    return tk;
 }
 
-bool is_func(char *test_str) {
-    if (strcmp(test_str, "func") != 0) {
-        return false;
-    }
-    return true;
+struct token* mint_str(char *token_begin, char *token_end) {
+    assert(token_end > token_begin);
+    size_t len = token_end - token_begin;
+    struct token* tk = malloc(sizeof(struct token));
+    tk->next_token = NULL;
+    // -2 to remove quotes, + 1 for null byte
+    char *receptacle = malloc(len - 2 + 1);
+    // constants to remove quotes
+    strncpy(receptacle, token_begin + 1, len - 1);
+    tk->type = tok_string;
+    tk->value.string = receptacle;
+    return tk;
 }
 
-// TODO: handle string escaping
-bool is_string(char *test_str) {
-    if (test_str[0] != '"') return false;
-    for (size_t i = 0; test_str[i] != '\0'; i++) {
-        if (test_str[i] == '"' && test_str[i+1] != '\0') {
-            return false;
-        }
+struct token *mint_symbol(char *token_begin, char *token_end) {
+    assert(token_end > token_begin);
+    size_t len = token_end - token_begin;
+    if (len > 2) {
+        panic("Too many symbols!", token_begin);
     }
-    return true;
-}
-
-// TODO: 1.1.1 is valid. it shouldn't be.
-bool is_num(char *test_str) {
-    for (size_t i = 0; test_str[i] != '\0'; i++) {
-        if (!(isdigit(test_str[i]) || test_str[i] == '.')) {
-            return false;
-        }
-    }
-    return true;
-}
-
-struct token_list* make_token_list() {
-    struct token_list *new_list = malloc(sizeof(struct token));
-    new_list->head = NULL;
-    new_list->tail = NULL;
-    return new_list;
-}
-
-struct token* pop_token_list(struct token_list* tk_list) {
-    struct token *cur = tk_list->head;
-    if (cur != NULL) {
-        tk_list->head = tk_list->head->next_token;
-    }
-    return cur;
-}
-
-struct token* peek_token_list(struct token_list* tk_list) {
-    struct token *cur = tk_list->head;
-    if (cur != NULL) {
-        return tk_list->head->next_token;
-    } else {
-        return NULL;
-    }
-}
-
-void append_token_list(struct token_list* tk_list, struct token* new_token) {
-    if (tk_list->head == NULL) {
-        tk_list->head = new_token;
-    }
-    if (tk_list->tail != NULL) {
-        tk_list->tail->next_token = new_token;
-    }
-    tk_list->tail = new_token;
-    new_token->next_token = NULL;
-}
-
-void destroy_token_list(struct token_list *tk_list) {
-    struct token *prev_tok = NULL;
-    struct token *cur_tok = tk_list->head;
-    while (cur_tok != NULL) {
-        prev_tok = cur_tok;
-        cur_tok = cur_tok->next_token;
-        free(prev_tok);
-    }
+    struct token* tk = malloc(sizeof(struct token));
+    tk->next_token = NULL;
+    char *receptacle = malloc(2);
+    strncpy(receptacle, token_begin, len);
+    tk->type = tok_punc;
+    tk->value.string = receptacle;
+    return tk;
 }
