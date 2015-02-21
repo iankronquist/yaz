@@ -5,6 +5,41 @@ void panic(const char* message, char* context) {
     exit(-1);
 }
 
+void print_token(struct token *tk) {
+    if (tk == NULL) {
+        puts ("NULL TOKEN!");
+        return;
+    }
+    switch (tk->type) {
+        case tok_dbl:
+            puts("dbl");
+            break;
+        case tok_identifier:
+            puts("ident");
+            printf("|%s|\n", tk->value.string);
+            break;
+        case tok_number:
+            puts("num");
+            break;
+        case tok_string:
+            puts("str");
+            break;
+        case tok_punc:
+            puts("punc");
+            printf("%s", tk->value.string);
+            break;
+        case tok_def:
+            puts("def");
+            break;
+        case tok_extern:
+            puts("extern");
+            break;
+        default:
+            puts("Invalid token!");
+            assert(0);
+    }
+}
+
 struct token_list* get_tok(char* buffer, size_t buffer_len) {
     struct token_list* tk_list = make_token_list();
     char* token_begin = buffer;
@@ -17,7 +52,7 @@ struct token_list* get_tok(char* buffer, size_t buffer_len) {
                 if (isalpha(buffer[index]) || buffer[index] == '_') {
                     state = IDENT;
                 } else if (isdigit(buffer[index])) {
-                    state = IDENT;
+                    state = INT;
                 } else if (buffer[index] == '"') {
                     state = STR;
                 } else if (buffer[index] != ' ') {
@@ -25,7 +60,7 @@ struct token_list* get_tok(char* buffer, size_t buffer_len) {
                 }
                 break;
             case IDENT:
-                if (!isalnum(buffer[index]) && !buffer[index] == '_') {
+                if (!isalnum(buffer[index]) && buffer[index] != '_') {
                     token_end = &buffer[index];
                     append_token_list(tk_list, mint_ident(token_begin, token_end));
                     state = UNKNOWN;
@@ -39,12 +74,14 @@ struct token_list* get_tok(char* buffer, size_t buffer_len) {
                     token_end = &buffer[index];
                     append_token_list(tk_list, mint_int(token_begin, token_end));
                 }
+                break;
             case DBL:
                 if (!isdigit(buffer[index])) {
                     state = UNKNOWN;
                     token_end = &buffer[index];
                     append_token_list(tk_list, mint_dbl(token_begin, token_end));
                 }
+                break;
             case STR:
                 if (&buffer[index] == buffer) {
                     panic("Lines can't start with a string", buffer);
@@ -54,12 +91,15 @@ struct token_list* get_tok(char* buffer, size_t buffer_len) {
                     token_end = &buffer[index];
                     append_token_list(tk_list, mint_str(token_begin, token_end));
                 }
+                break;
             case SYMBOL:
-                if (isalnum(buffer[index]) || buffer[index] == '_') {
+                if (isalnum(buffer[index]) || buffer[index] == '_' ||
+                        buffer[index] =='\n') {
                     state = UNKNOWN;
                     token_end = &buffer[index];
                     append_token_list(tk_list, mint_symbol(token_begin, token_end));
                 }
+                break;
         }
     }
     return tk_list;
@@ -67,15 +107,17 @@ struct token_list* get_tok(char* buffer, size_t buffer_len) {
 
 struct token* mint_ident(char *token_begin, char *token_end) {
     assert(token_end > token_begin);
-    size_t len = token_begin - token_end;
+    size_t len = token_end - token_begin;
     struct token* tk = malloc(sizeof(struct token));
     // + 1 for null byte
     char *receptacle = malloc(len + 1);
-    if (strncmp(receptacle, "extern", 6)) {
+    if (strncmp(token_begin, "extern", 6) == 0) {
         tk->type = tok_extern;
+        tk->value.string = NULL;
         tk->next_token = NULL;
-    } else if (strncmp(receptacle, "def", 3)) {
+    } else if (strncmp(token_begin, "def", 3) == 0) {
         tk->type = tok_def;
+        tk->value.string = NULL;
         tk->next_token = NULL;
     } else {
         tk->type = tok_identifier;
