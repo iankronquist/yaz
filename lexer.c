@@ -107,10 +107,7 @@ struct token_list* get_tok(char* buffer, size_t buffer_len) {
 
 struct token* mint_ident(char *token_begin, char *token_end) {
     assert(token_end > token_begin);
-    size_t len = token_end - token_begin;
     struct token* tk = malloc(sizeof(struct token));
-    // + 1 for null byte
-    char *receptacle = malloc(len + 1);
     if (strncmp(token_begin, "extern", 6) == 0) {
         tk->type = tok_extern;
         tk->value.string = NULL;
@@ -120,6 +117,9 @@ struct token* mint_ident(char *token_begin, char *token_end) {
         tk->value.string = NULL;
         tk->next_token = NULL;
     } else {
+        size_t len = token_end - token_begin;
+        // + 1 for null byte
+        char *receptacle = malloc(len + 1);
         tk->type = tok_identifier;
         tk->next_token = NULL;
         strncpy(receptacle, token_begin, len);
