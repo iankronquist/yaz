@@ -31,7 +31,11 @@ ast_tests: ast build
 parser:  build panic
 	$(CC) -c parser.c build/panic.o -o build/parser.o $(CFLAGS)
 
-tests: ast_tests lexer_tests
+parser_tests: parser
+	$(CC) parser_tests.c build/parser.o -o tests/bin/parser_tests \
+	  $(CFLAGS)
+
+tests: ast_tests lexer_tests parser_tests
 
 build:
 	mkdir build
