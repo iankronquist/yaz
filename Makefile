@@ -10,7 +10,7 @@ lexer:  build
 	$(CC) -c lexer.c build/token_list.o -o build/lexer.o $(CFLAGS)
 
 test_lexer: lexer build
-	$(CC) lexer_tests.c build/lexer.o -o tests/bin/lexer_tests $(CFLAGS) 
+	$(CC) lexer_tests.c build/token_list.o build/lexer.o -o tests/bin/lexer_tests $(CFLAGS)
 
 ast: build lexer
 	$(CC) -c ast.c build/lexer.o -o build/ast.o $(CFLAGS)
