@@ -29,10 +29,11 @@ void print_token(struct token *tk) {
             break;
         case tok_string:
             printf("str\n");
+            printf("|%s|\n", tk->value.string);
             break;
         case tok_punc:
             printf("punc\n");
-            printf("punc %s", tk->value.string);
+            printf("%s", tk->value.string);
             break;
         case tok_def:
             printf("def\n");
@@ -154,6 +155,8 @@ struct token* mint_dbl(char *token_begin, char *token_end) {
 
 struct token* mint_str(char *token_begin, char *token_end) {
     assert(token_end > token_begin);
+    assert(*token_begin == '"');
+    assert(*token_end == '"');
     size_t len = token_end - token_begin;
     struct token* tk = malloc(sizeof(struct token));
     tk->next_token = NULL;
@@ -161,6 +164,8 @@ struct token* mint_str(char *token_begin, char *token_end) {
     char *receptacle = malloc(len - 2 + 1);
     // constants to remove quotes
     strncpy(receptacle, token_begin + 1, len - 1);
+    // strncpy will not terminate the string in this case
+    receptacle[len-1] = '\0';
     tk->type = tok_string;
     tk->value.string = receptacle;
     return tk;
