@@ -41,6 +41,11 @@ void destroy_token_list(struct token_list *tk_list) {
     while (cur_tok != NULL) {
         prev_tok = cur_tok;
         cur_tok = cur_tok->next_token;
+        if (prev_tok->type == tok_identifier ||
+                prev_tok->type == tok_punc ||
+                prev_tok->type == tok_string) {
+            free(prev_tok->value.string);
+        }
         free(prev_tok);
     }
     free(tk_list);
