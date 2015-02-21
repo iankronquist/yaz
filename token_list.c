@@ -43,4 +43,5 @@ void destroy_token_list(struct token_list *tk_list) {
         cur_tok = cur_tok->next_token;
         free(prev_tok);
     }
+    free(tk_list);
 }

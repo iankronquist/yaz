@@ -35,6 +35,9 @@ void test_append_token_list() {
     EXPECT_EQ(tkl->tail, new_token1);
     EXPECT_EQ(new_token0->next_token, new_token1);
     EXPECT_EQ(new_token1->next_token, NULL);
+    free(new_token0);
+    free(new_token1);
+    free(tkl);
 }
 
 void test_destroy_token_list() {
