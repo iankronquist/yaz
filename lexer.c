@@ -62,6 +62,8 @@ struct token_list* get_tok(char* buffer, size_t buffer_len) {
                     state = INT;
                 } else if (buffer[index] == '"') {
                     state = STR;
+                } else if (buffer[index] == '#') {
+                    return tk_list;
                 } else if (buffer[index] != ' ') {
                     state = SYMBOL;
                 }
