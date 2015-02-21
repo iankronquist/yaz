@@ -2,14 +2,6 @@
 #include "token.h"
 #include "tests.h"
 
-
-int exit_called_with = 0;
-// Monkey patch exit()
-void exit(int status) {
-    exit_called_with = status;
-}
-
-
 void test_get_tok();
 
 int main() {
