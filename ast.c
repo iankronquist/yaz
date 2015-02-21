@@ -21,7 +21,7 @@ struct ast_node* make_node(struct token *val, size_t num_children, ...) {
 void append_child(struct ast_node *node, struct ast_node *val) {
     if (node->num_children == node->children_cap) {
         node->children_cap *= 2;
-        realloc(node->children, node->num_children * 2);
+        node->children = realloc(node->children, node->num_children * 2);
     }
     node->children[node->num_children] = val;
     node->num_children++;
