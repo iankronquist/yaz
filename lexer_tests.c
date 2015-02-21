@@ -17,6 +17,10 @@ void test_get_tok(char* new_token) {
     received = get_tok(tok, strlen(tok));
     EXPECT_EQ(received->head, NULL);
 
+    tok = "# asdf\n";
+    received = get_tok(tok, strlen(tok));
+    EXPECT_EQ(received->head, NULL);
+
     tok = "1.23   \n";
     received = get_tok(tok, strlen(tok));
     print_token(received->head);
