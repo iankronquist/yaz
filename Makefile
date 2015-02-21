@@ -25,13 +25,13 @@ ast: build lexer
 	$(CC) -c ast.c build/lexer.o -o build/ast.o $(CFLAGS)
 
 ast_tests: ast build
-	$(CC) ast_tests.c build/lexer.o build/ast.o -o tests/bin/ast_tests \
+	$(CC) ast_tests.c build/ast.o -o tests/bin/ast_tests \
 	  $(CFLAGS)
 
 parser:  build panic
 	$(CC) -c parser.c build/panic.o -o build/parser.o $(CFLAGS)
 
-tests: test_ast test_lexer
+tests: ast_tests lexer_tests
 
 build:
 	mkdir build
