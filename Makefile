@@ -5,12 +5,15 @@ yaz: build
 	$(CC) yaz.c build/lexer.o build/parser.o -o build/bin/yaz  $(CFLAGS)
 
 
-lexer:  build
-	$(CC) -c token_list.c -o build/token_list.o $(CFLAGS)
+lexer:  build token_list
 	$(CC) -c lexer.c build/token_list.o -o build/lexer.o $(CFLAGS)
 
-test_lexer: lexer build
+token_list: build
+	$(CC) -c token_list.c -o build/token_list.o $(CFLAGS)
+
+test_lexer: lexer token_list build
 	$(CC) lexer_tests.c build/token_list.o build/lexer.o -o tests/bin/lexer_tests $(CFLAGS)
+	$(CC) token_list_tests.c build/token_list.o -o tests/bin/token_list_tests $(CFLAGS)
 
 ast: build lexer
 	$(CC) -c ast.c build/lexer.o -o build/ast.o $(CFLAGS)
