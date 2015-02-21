@@ -1,13 +1,19 @@
-#include "lexer.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <stdbool.h>
+#include <assert.h>
+#include <string.h>
+#include <ctype.h>
 
-void panic(const char* message, char* context) {
-    printf("Lexing error: %s %s", message, context);
-    exit(-1);
-}
+#include "lexer.h"
+#include "token.h"
+#include "token_list.h"
+#include "panic.h"
 
 void print_token(struct token *tk) {
     if (tk == NULL) {
-        puts ("NULL TOKEN!");
+        puts("NULL TOKEN!");
         return;
     }
     switch (tk->type) {

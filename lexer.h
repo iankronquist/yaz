@@ -1,12 +1,5 @@
 #ifndef LEXER_H
 #define LEXER_H
-#include <stdlib.h>
-#include <stdio.h>
-#include <stddef.h>
-#include <stdbool.h>
-#include <assert.h>
-#include <string.h>
-#include <ctype.h>
 #include "token.h"
 #include "token_list.h"
 
@@ -19,7 +12,7 @@ typedef enum {
     SYMBOL
 } lex_state;
 
-void panic(const char* message, char* context);
+void print_token(struct token *tk);
 struct token_list* get_tok(char* buffer, size_t buffer_len);
 struct token* mint_str(char *token_begin, char *token_end);
 struct token* mint_int(char *token_begin, char *token_end);
