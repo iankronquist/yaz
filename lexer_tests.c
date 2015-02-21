@@ -62,4 +62,6 @@ void test_get_tok(char* new_token) {
     EXPECT_EQ(received->head->type, tok_punc);
     EXPECT_EQ_STR(received->head->value.string, "!=");
     EXPECT_EQ(received->head->next_token, NULL);
+
+    destroy_token_list(received);
 }
