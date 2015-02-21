@@ -13,35 +13,35 @@
 
 void print_token(struct token *tk) {
     if (tk == NULL) {
-        puts("NULL TOKEN!");
+        printf("NULL TOKEN!");
         return;
     }
     switch (tk->type) {
         case tok_dbl:
-            puts("dbl");
+            printf("dbl\n");
             break;
         case tok_identifier:
-            puts("ident");
+            printf("ident\n");
             printf("|%s|\n", tk->value.string);
             break;
         case tok_number:
-            puts("num");
+            printf("num\n");
             break;
         case tok_string:
-            puts("str");
+            printf("str\n");
             break;
         case tok_punc:
-            puts("punc");
-            printf("%s", tk->value.string);
+            printf("punc\n");
+            printf("punc %s", tk->value.string);
             break;
         case tok_def:
-            puts("def");
+            printf("def\n");
             break;
         case tok_extern:
-            puts("extern");
+            printf("extern\n");
             break;
         default:
-            puts("Invalid token!");
+            printf("Invalid token!\n");
             assert(0);
     }
 }
