@@ -61,41 +61,49 @@ void test_get_tok(char* new_token) {
     struct token_list *received;
     char *tok;
 
-    tok = "";
+    tok = "\n";
     received = get_tok(tok, strlen(tok));
-    EXPECT_EQ(received, NULL);
+    EXPECT_EQ(received->head, NULL);
 
-    tok = "1.23";
+    tok = "1.23   \n";
     received = get_tok(tok, strlen(tok));
-    EXPECT_EQ(received->type, tok_number);
-    EXPECT_EQ(received->value.dbl, 1.23);
-    EXPECT_EQ(received->next_token, NULL);
+    print_token(received->head);
+    EXPECT_EQ(received->head->type, tok_dbl);
+    EXPECT_EQ(received->head->value.dbl, 1.23);
+    EXPECT_EQ(received->head->next_token, NULL);
 
-    tok = "\"abc def\"";
+    tok = "\"abc def\"\n";
     received = get_tok(tok, strlen(tok));
-    EXPECT_EQ(received->type, tok_string);
-    EXPECT_EQ_STR(received->value.string, "abc def");
-    EXPECT_EQ(received->next_token, NULL);
+    print_token(received->head);
+    EXPECT_EQ(received->head->type, tok_string);
+    EXPECT_EQ_STR(received->head->value.string, "abc def");
+    EXPECT_EQ(received->head->next_token, NULL);
 
-    tok = "func";
+    tok = "def\n";
     received = get_tok(tok, strlen(tok));
-    EXPECT_EQ(received->type, tok_def);
-    EXPECT_EQ(received->value.dbl, 1.23);
-    EXPECT_EQ(received->next_token, NULL);
+    print_token(received->head);
+    EXPECT_EQ(received->head->type, tok_def);
+    EXPECT_EQ(received->head->value.string, NULL);
+    EXPECT_EQ(received->head->next_token, NULL);
 
-    tok = "abc123";
+    tok = "abc123\n";
     received = get_tok(tok, strlen(tok));
-    EXPECT_EQ(received->type, tok_identifier);
-    EXPECT_EQ(received->value.string, "abc123");
-    EXPECT_EQ(received->next_token, NULL);
+    print_token(received->head);
+    EXPECT_EQ(received->head->type, tok_identifier);
+    EXPECT_EQ_STR(received->head->value.string, "abc123");
+    EXPECT_EQ(received->head->next_token, NULL);
 
-    tok = "+";
+    tok = "+\n";
     received = get_tok(tok, strlen(tok));
-    EXPECT_EQ(received->type, tok_punc);
-    EXPECT_EQ(received->value.string, "+");
-    EXPECT_EQ(received->next_token, NULL);
+    print_token(received->head);
+    EXPECT_EQ(received->head->type, tok_punc);
+    EXPECT_EQ_STR(received->head->value.string, "+");
+    EXPECT_EQ(received->head->next_token, NULL);
 
-    tok = "..";
+    tok = "!=\n";
     received = get_tok(tok, strlen(tok));
-    EXPECT_EQ(exit_called_with, -1);
+    print_token(received->head);
+    EXPECT_EQ(received->head->type, tok_punc);
+    EXPECT_EQ_STR(received->head->value.string, "!=");
+    EXPECT_EQ(received->head->next_token, NULL);
 }
