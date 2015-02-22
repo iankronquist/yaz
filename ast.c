@@ -8,7 +8,7 @@ struct ast_node* make_node(struct token *val, size_t num_children, ...) {
     new_node->num_children = num_children;
     // pointers are small, so allocating extra space is cheap
     new_node->children_cap = num_children + 2;
-    new_node->children = calloc(num_children + 2, sizeof(struct ast_node));
+    new_node->children = calloc(num_children + 2, sizeof(struct ast_node*));
     va_list children;
     va_start(children, num_children);
     for (size_t i = 0; i < num_children; i++) {
@@ -21,7 +21,8 @@ struct ast_node* make_node(struct token *val, size_t num_children, ...) {
 void append_child(struct ast_node *node, struct ast_node *val) {
     if (node->num_children == node->children_cap) {
         node->children_cap *= 2;
-        node->children = realloc(node->children, node->num_children * 2);
+        node->children = realloc(node->children, node->num_children * 2 * sizeof(struct ast_node*));
+        puts("resizing");
     }
     node->children[node->num_children] = val;
     node->num_children++;
