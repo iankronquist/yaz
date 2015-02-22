@@ -16,9 +16,9 @@ struct token *make_token(enum token_type tk_type, char* str, double dbl,
     if (tk_type == tok_dbl) {
         tk->value.dbl = dbl;
     } else if (tk_type == tok_number) {
-        tk->value.number = number;
+        tk->value.num = number;
     } else {
-        tk->value.string = string;
+        tk->value.string = str;
     }
     return tk;
 }
