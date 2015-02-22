@@ -50,8 +50,10 @@ struct ast_node *parse_identifier(struct token_list *tkl) {
             append_child(func_call, expr);
         }
     } else { // else it is just a variable
-        return parse_variable(identifier);
+        return parse_variable(tkl);
     }
+    // NOTREACHED
+    return NULL;
 }
 
 struct ast_node *parse_variable(struct token_list *tkl) {
