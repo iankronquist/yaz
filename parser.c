@@ -1,9 +1,10 @@
 #include <assert.h>
 #include <stdbool.h>
+#include <string.h>
 #include "panic.h"
 #include "parser.h"
 
-const char precedences[] = {'<', '>', '+', '-', '*'};
+const char* precedences[] = {"<", ">", "+", "-", "*"};
 const int num_operators = sizeof(precedences);
 
 struct ast_node *parse_number(struct token_list* tkl) {
@@ -76,14 +77,15 @@ struct ast_node *parse_primary(struct token_list *tkl) {
     return NULL;
 }
 
-int get_precedence(char op) {
+int get_precedence(char* op) {
     int precedence;
     for (precedence = 0; precedence < num_operators; precedence++) {
-        if (op == precedences[precedence]) {
+        if (strncmp(op, precedences[precedence], 2) == 0) {
             return precedence;
         }
     }
     panic("Unexpected operator!", "get_precedence");
+    return -1;
 }
 
 struct ast_node *parse_expr(struct token_list *tkl) {
@@ -96,12 +98,12 @@ struct ast_node *parse_bin_op_right_side(struct token_list *tkl, int expr_prec, 
     while (true) {
         struct token *cur = peek_token_list(tkl);
         if (cur != NULL && cur->type == tok_punc) {
-            int precedence = get_precedence(cur->value.string[0]);
+            int precedence = get_precedence(cur->value.string);
             struct token* bin_op = pop_token_list(tkl);
-            struct token* right_side = parse_primary(tkl);
+            struct ast_node* right_side = parse_primary(tkl);
             if (right_side == NULL) return NULL;
             struct token *next_token = peek_token_list(tkl);
-            int next_precedence = get_precedence(next_token);
+            int next_precedence = get_precedence(next_token->value.string);
             if (precedence < next_precedence) {
                 right_side = parse_bin_op_right_side(tkl, precedence + 1,
                                                      right_side);

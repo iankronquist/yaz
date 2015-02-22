@@ -5,9 +5,9 @@
 
 // This could be a hash table, but those things are hefty
 // Since this list is so short anyway the precedence is the index in the list
-extern const char precedences[];
+extern const char* precedences[];
 extern const int num_operators;
-int get_precedence(char op);
+int get_precedence(char* op);
 struct ast_node *parse_number(struct token_list* tkl);
 struct ast_node *parse_paren(struct token_list *tkl);
 struct ast_node *parse_identifier(struct token_list *tkl);
