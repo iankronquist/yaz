@@ -31,9 +31,9 @@ ast_tests: ast build
 parser:  build panic
 	$(CC) -c parser.c build/panic.o -o build/parser.o $(CFLAGS)
 
-parser_tests: parser
-	$(CC) parser_tests.c build/parser.o -o tests/bin/parser_tests \
-	  $(CFLAGS)
+parser_tests: parser token_list panic ast
+	$(CC) parser_tests.c build/panic.o build/ast.o build/token_list.o \
+	  build/parser.o -o tests/bin/parser_tests $(CFLAGS)
 
 tests: ast_tests lexer_tests parser_tests
 
