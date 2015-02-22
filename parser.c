@@ -123,30 +123,29 @@ struct ast_node *parse_bin_op_right_side(struct token_list *tkl, int expr_prec, 
 struct ast_node *parse_prototype(struct token_list *tkl) {
     struct token *cur = pop_token_list(tkl);
     struct token *identifier = cur; // the identifier
+    if (cur->type != tok_identifier) {
+        parse_error("Type tok_identifier", "something else", "context");
+    }
     cur = peek_token_list(tkl); // get the next token
-
     // If the next token is a ( this is a function call
     if (cur->type == tok_punc && cur->value.string[0] == '(') {
-        //discard the paren
-        pop_token_list(tkl);
-        // allocate the function call
-        struct ast_node *func_call = make_node(identifier, 0);
-        // for each function in the list
-        while (true) {
-            // parse the expression
-            struct ast_node *expr = parse_expr(tkl);
-            if (expr == NULL) return NULL;
-            cur = pop_token_list(tkl);
-            // if the next token is a paren, stop
-            if (cur->type == tok_punc && cur->value.string[0] == ')') {
-                break;
-            } else if (cur->type == tok_punc && cur->value.string[0] != ',') {
-                // but if it's also not a comma, error
-                parse_error(") or ,", cur->value.string, "");
-            }
-            // Append the expression to the function call's chilren
-            append_child(func_call, expr);
-        }
+        parse_error("(", "something else", "context");
     }
-    return cur;
+    //discard the paren
+    pop_token_list(tkl);
+    // allocate the function call
+    struct ast_node *func_call = make_node(identifier, 0);
+    // for each function in the list
+    while (cur->type != tok_punc && cur->value.string[0] != ')') {
+        struct ast_node *expr = parse_expr(tkl);
+        cur = pop_token_list(tkl);
+        if (cur->type == tok_punc &&
+                (cur->value.string[0] != ',' || cur->value.string[0] != ')')) {
+            // but if it's also not a comma, error
+            parse_error(") or ,", cur->value.string, "");
+        }
+        // Append the expression to the function call's chilren
+        append_child(func_call, expr);
+    }
+    return func_call;
 }
