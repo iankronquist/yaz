@@ -12,8 +12,9 @@ project, as well as the imperitive form of "write!"
 
 TODO:
 ----
-* Write docs
-* Write more tests
+* Add lots of comments
+* Squash all the warnings from `parser.h`
+* Finish writing tests for parser
 * Provide a formal definition of yaz, with BNF notation and all
 
 Hacking
