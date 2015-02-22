@@ -13,8 +13,8 @@ project, as well as the imperitive form of "write!"
 TODO:
 ----
 * Add lots of comments
-* Squash all the warnings from `parser.h`
 * Finish writing tests for parser
+* Add docs
 * Provide a formal definition of yaz, with BNF notation and all
 
 Hacking
