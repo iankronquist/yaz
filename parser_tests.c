@@ -25,9 +25,10 @@ struct token *make_token(enum token_type tk_type, char* str, double dbl,
 
 void test_parse_number() {
     struct token_list *tkl = make_token_list();
-    tkl.append(make_token(tok_number, NULL, 0.0, 42);
+    struct token *tk = make_token(tok_number, NULL, 0.0, 42);
+    append_token_list(tkl, tk);
     struct ast_node *result = parse_number(tkl);
-    EXPECT_EQ(result->val, tkl->head);
+    EXPECT_EQ(result->val, tk);
     EXPECT_EQ(result->num_children, 0);
     destroy_token_list(tkl);
 }
