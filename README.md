@@ -19,8 +19,8 @@ TODO:
 
 Hacking
 ------
-It's pretty straightforwards to play with, although it's not the most elegant.
-To make:
+It's pretty straightforwards to play with.
+To make (currently broken):
 ```sh
 $ make
 ```
@@ -28,7 +28,7 @@ $ make
 To test (requires valgrind):
 ```sh
 $ make tests
-$ ./runtests
+$ ./runtests.sh
 ```
 
 The eventual goal is to have a parser and maybe even a vm. In theory you'd want
