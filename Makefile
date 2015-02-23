@@ -22,14 +22,14 @@ lexer_tests: lexer token_list build
 	  $(CFLAGS)
 
 ast: build lexer
-	$(CC) -c ast.c build/lexer.o -o build/ast.o $(CFLAGS)
+	$(CC) -c ast.c -o build/ast.o $(CFLAGS)
 
 ast_tests: ast build
 	$(CC) ast_tests.c build/ast.o -o tests/bin/ast_tests \
 	  $(CFLAGS)
 
 parser:  build panic
-	$(CC) -c parser.c build/panic.o -o build/parser.o $(CFLAGS)
+	$(CC) -c parser.c -o build/parser.o $(CFLAGS)
 
 parser_tests: parser token_list panic ast
 	$(CC) parser_tests.c build/panic.o build/ast.o build/token_list.o \
