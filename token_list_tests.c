@@ -10,7 +10,7 @@ int main() {
     test_make_token_list();
     test_append_token_list();
     test_destroy_token_list();
-    return 0;
+    return RETURN_VALUE;
 }
 
 void test_make_token_list() {

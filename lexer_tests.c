@@ -6,7 +6,7 @@ void test_get_tok();
 
 int main() {
     test_get_tok();
-    return 0;
+    return RETURN_VALUE;
 }
 
 void test_get_tok(char* new_token) {

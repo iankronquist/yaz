@@ -9,6 +9,7 @@ int main() {
     test_make_node();
     test_append_child();
     test_delete_node();
+    return RETURN_VALUE;
 }
 
 void test_make_node() {
