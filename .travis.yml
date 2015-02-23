@@ -2,4 +2,9 @@ language: c
 compiler:
   - clang
   - gcc
-script: make tests && ./runtests.sh
+before_script:
+  - sudo apt-get -qq update
+  - sudo apt-get -qq install valgrind
+script:
+  - make tests
+  - ./runtests.sh
