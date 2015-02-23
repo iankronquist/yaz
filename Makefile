@@ -37,6 +37,9 @@ parser_tests: parser token_list panic ast
 
 tests: ast_tests lexer_tests parser_tests
 
+docs:
+	doxygen Doxyfile
+
 build:
 	mkdir build
 	mkdir -p tests/bin
@@ -45,3 +48,4 @@ clean:
 	rm -rf build
 	rm -f yaz
 	rm -rf tests/bin
+	rm -rf docs

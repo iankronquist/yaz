@@ -1,7 +1,7 @@
 The Yaz Interpreter
 ===================
 
-[![Build Status](https://travis-ci.org/iankronquist/yaz.svg?branch=master>)](https://travis-ci.org/iankronquist/yaz.svg?branch=master>)
+[![Build Status](https://travis-ci.org/iankronquist/yaz.svg?branch=master)](https://travis-ci.org/iankronquist/yaz.svg?branch=master)
 
 Yaz is a made up programming language to practice C and to better understand
 how programming languages work.
@@ -38,3 +38,14 @@ to run it like:
 ```sh
 $ ./yaz test.yaz
 ```
+
+Documentation
+-------------
+Docs are generated using Doxygen. Install Doxygen and run:
+
+```sh
+$ make docs
+```
+
+By default html docs will be built. A Makefile to generate Latex docs can be
+found in `docs/latex`.
