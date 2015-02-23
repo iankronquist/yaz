@@ -1,5 +1,4 @@
 language: c
-install: make valgrind clang
 compiler:
   - clang
   - gcc
