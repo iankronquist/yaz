@@ -16,7 +16,6 @@ TODO:
 ----
 * Add lots of comments
 * Finish writing tests for parser
-* Add travis CI
 * Add docs
 * Provide a formal definition of yaz, with BNF notation and all
 
