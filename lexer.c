@@ -11,42 +11,6 @@
 #include "token_list.h"
 #include "panic.h"
 
-void print_token(struct token *tk) {
-    if (tk == NULL) {
-        printf("NULL TOKEN!");
-        return;
-    }
-    switch (tk->type) {
-        case tok_dbl:
-            printf("dbl\n");
-            break;
-        case tok_identifier:
-            printf("ident\n");
-            printf("|%s|\n", tk->value.string);
-            break;
-        case tok_number:
-            printf("num\n");
-            break;
-        case tok_string:
-            printf("str\n");
-            printf("|%s|\n", tk->value.string);
-            break;
-        case tok_punc:
-            printf("punc\n");
-            printf("%s", tk->value.string);
-            break;
-        case tok_def:
-            printf("def\n");
-            break;
-        case tok_extern:
-            printf("extern\n");
-            break;
-        default:
-            printf("Invalid token!\n");
-            assert(0);
-    }
-}
-
 struct token_list* get_tok(char* buffer, size_t buffer_len) {
     struct token_list* tk_list = make_token_list();
     char* token_begin = buffer;

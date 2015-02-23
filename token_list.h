@@ -9,6 +9,7 @@ struct token_list {
     struct token *tail;
 };
 
+void print_token(struct token *tk);
 struct token_list* make_token_list();
 struct token *pop_token_list(struct token_list* tkl);
 struct token *peek_token_list(struct token_list* tkl);

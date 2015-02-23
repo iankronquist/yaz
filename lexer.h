@@ -12,7 +12,6 @@ typedef enum {
     SYMBOL
 } lex_state;
 
-void print_token(struct token *tk);
 struct token_list* get_tok(char* buffer, size_t buffer_len);
 struct token* mint_str(char *token_begin, char *token_end);
 struct token* mint_int(char *token_begin, char *token_end);
