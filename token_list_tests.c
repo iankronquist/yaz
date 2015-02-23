@@ -43,6 +43,8 @@ void test_append_token_list() {
 void test_destroy_token_list() {
     struct token* new_token0 = malloc(sizeof(struct token));
     struct token* new_token1 = malloc(sizeof(struct token));
+    new_token0->type = tok_number;
+    new_token1->type = tok_number;
     struct token_list *tkl = make_token_list();
     append_token_list(tkl, new_token0);
     append_token_list(tkl, new_token1);
