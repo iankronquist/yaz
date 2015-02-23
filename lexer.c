@@ -96,6 +96,7 @@ struct token* mint_ident(char *token_begin, char *token_end) {
         tk->type = tok_identifier;
         tk->next_token = NULL;
         strncpy(receptacle, token_begin, len);
+        receptacle[len] = '\0';
         tk->value.string = receptacle;
     }
     return tk;
@@ -126,8 +127,7 @@ struct token* mint_str(char *token_begin, char *token_end) {
     size_t len = token_end - token_begin;
     struct token* tk = malloc(sizeof(struct token));
     tk->next_token = NULL;
-    // -2 to remove quotes, + 1 for null byte
-    char *receptacle = malloc(len - 2 + 1);
+    char *receptacle = malloc(len);
     // constants to remove quotes
     strncpy(receptacle, token_begin + 1, len - 1);
     // strncpy will not terminate the string in this case
@@ -145,8 +145,9 @@ struct token *mint_symbol(char *token_begin, char *token_end) {
     }
     struct token* tk = malloc(sizeof(struct token));
     tk->next_token = NULL;
-    char *receptacle = malloc(2);
+    char *receptacle = malloc(3);
     strncpy(receptacle, token_begin, len);
+    receptacle[len] = '\0';
     tk->type = tok_punc;
     tk->value.string = receptacle;
     return tk;
