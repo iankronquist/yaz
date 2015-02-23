@@ -6,7 +6,7 @@ void test_parse_number();
 
 int main() {
     test_parse_number();
-    return 0;
+    return RETURN_VALUE;
 }
 
 struct token *make_token(enum token_type tk_type, char* str, double dbl,
