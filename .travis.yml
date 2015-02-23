@@ -1,0 +1,6 @@
+language: c
+install: make valgrind clang
+compiler:
+  - clang
+  - gcc
+script: make tests && ./runtests.sh
