@@ -31,4 +31,5 @@ void test_parse_number() {
     EXPECT_EQ(result->val, tk);
     EXPECT_EQ(result->num_children, 0);
     destroy_token_list(tkl);
+    delete_node(result);
 }
