@@ -1,11 +1,13 @@
 #include "ast.h"
 
 
-/*
-    Create a new ast node with optional children.
-    Pre Conditions:
-    * `val` must not be NULL.
-    * `num_children` must equal the number of children and may be 0.
+/**
+    @brief Create a new ast node with optional children.
+    @pre
+    - `val` must not be NULL. 
+    - `num_children` must equal the number of children
+      and may be 0.
+    @return
     Returns a newly allocated ast node which holds the provided token and
     has the provided children.
 */
@@ -26,13 +28,13 @@ struct ast_node* make_node(struct token *val, size_t num_children, ...) {
 }
 
 
-/*
-    Add a child to the provided node.
-    Pre Conditions:
-    * `node` must not be NULL.
-    * `val`, the new child, should not be NULL.
-    Post Conditions:
-    * `node` has an additional child which is the provided `val`.
+/**
+    @brief Add a child to the provided node.
+    @pre
+    - `node` must not be NULL.
+    - `val`, the new child, should not be NULL.
+    @post
+    - `node` has an additional child which is the provided `val`.
 */
 void append_child(struct ast_node *node, struct ast_node *val) {
     // double the size of the array of children if the capacity has been
@@ -47,17 +49,17 @@ void append_child(struct ast_node *node, struct ast_node *val) {
 }
 
 
-/*
-    Recursively free all nodes and values.
-    Pre Conditions:
-    * `node` must not be NULL.
-    * `node` must be on the heap.
-    * `node`'s value and children array pointers must be allocated on the heap.
-    Post Conditions:
-    * `node`'s children are freed.
-    * `node`'s children array is freed.
-    * `node`'s value is freed.
-    * `node` is freed.
+/**
+    @brief Recursively free all nodes and values.
+    @pre
+    - `node` must not be NULL.
+    - `node` must be on the heap.
+    - `node`'s value and children array pointers must be allocated on the heap.
+    @post
+    - `node`'s children are freed.
+    - `node`'s children array is freed.
+    - `node`'s value is freed.
+    - `node` is freed.
 */
 void delete_node(struct ast_node *node) {
     for (size_t i = 0; i < node->num_children; i++) {
@@ -69,11 +71,11 @@ void delete_node(struct ast_node *node) {
 }
 
 
-/*
-    A post-order map accross all values in the tree.
-    Pre Conditions:
-    * `node` must not be NULL.
-    * `func` is a non-NULL function pointer which takes a pointer to a node and
+/**
+    @brief A post-order map accross all values in the tree.
+    @pre
+    - `node` must not be NULL.
+    - `func` is a non-NULL function pointer which takes a pointer to a node and
       returns void.
 */
 void ast_post_map(struct ast_node *node, void (*func)(struct ast_node*)) {
@@ -85,10 +87,10 @@ void ast_post_map(struct ast_node *node, void (*func)(struct ast_node*)) {
 
 
 /*
-    A post-order map accross all values in the tree.
-    Pre Conditions:
-    * `node` must not be NULL.
-    * `func` is a non-NULL function pointer which takes a pointer to a node and
+    @brief A post-order map accross all values in the tree.
+    @pre
+    - `node` must not be NULL.
+    - `func` is a non-NULL function pointer which takes a pointer to a node and
       returns void.
 */
 void ast_pre_map(struct ast_node *node, void (*func)(struct ast_node*)) {
