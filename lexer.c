@@ -124,7 +124,7 @@ struct token_list* get_tok(char* buffer, size_t buffer_len) {
     `token_begin` in a new NULL terminated allocation. Otherwise its value will
     be NULL.
 
-    @param 
+    @param
     The parameters `token_begin` and `tok_end` are non-null pointers to
     a string. `token_end` is greater than `token_end`.
 
@@ -157,6 +157,16 @@ struct token* mint_ident(char *token_begin, char *token_end) {
     return tk;
 }
 
+/**
+    @brief Allocate a new token of type `tok_number`.
+
+    @param
+    The parameters `token_begin` and `tok_end` are non-null pointers to
+    a string. `token_end` is greater than `token_end`.
+
+    @return
+    Returns newly allocated token.
+*/
 struct token* mint_int(char *token_begin, char *token_end) {
     assert(token_end > token_begin);
     struct token* tk = malloc(sizeof(struct token));
@@ -166,6 +176,16 @@ struct token* mint_int(char *token_begin, char *token_end) {
     return tk;
 }
 
+/**
+    @brief Allocate a new token of type `tok_dbl`.
+
+    @param
+    The parameters `token_begin` and `tok_end` are non-null pointers to
+    a string. `token_end` is greater than `token_end`.
+
+    @return
+    Returns newly allocated token.
+*/
 struct token* mint_dbl(char *token_begin, char *token_end) {
     assert(token_end > token_begin);
     struct token* tk = malloc(sizeof(struct token));
@@ -175,6 +195,21 @@ struct token* mint_dbl(char *token_begin, char *token_end) {
     return tk;
 }
 
+
+/**
+    @brief Allocate a new token of type `tok_str`.
+    `tok_def`.
+
+    The value of the token `token_begin` in a new NULL terminated allocation.
+    The value will not be enclosed in strings.
+
+    @param
+    The parameters `token_begin` and `tok_end` are non-null pointers to
+    a string. `token_end` is greater than `token_end`.
+
+    @return
+    Returns newly allocated token. Its value will be another new allocation.
+*/
 struct token* mint_str(char *token_begin, char *token_end) {
     assert(token_end > token_begin);
     assert(*token_begin == '"');
@@ -192,6 +227,20 @@ struct token* mint_str(char *token_begin, char *token_end) {
     return tk;
 }
 
+
+/**
+    @brief Allocate a new token of type `tok_punc`.
+
+    Its value will be copied from `token_begin` in a new NULL terminated
+    allocation.
+
+    @param
+    The parameters `token_begin` and `tok_end` are non-null pointers to
+    a string. `token_end` is greater than `token_end`.
+
+    @return
+    Returns newly allocated token. Its value will be another new allocation.
+*/
 struct token *mint_symbol(char *token_begin, char *token_end) {
     assert(token_end > token_begin);
     size_t len = token_end - token_begin;
