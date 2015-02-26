@@ -1,5 +1,5 @@
-#include "token.h"
-#include "token_list.h"
+#include "../../src/token.h"
+#include "../../src/token_list.h"
 #include "tests.h"
 
 void test_make_token_list();

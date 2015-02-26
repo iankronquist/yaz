@@ -1,5 +1,5 @@
-#include "lexer.h"
-#include "token.h"
+#include "../../src/lexer.h"
+#include "../../src/token.h"
 #include "tests.h"
 
 void test_get_tok();

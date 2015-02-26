@@ -1,4 +1,4 @@
-#include "ast.h"
+#include "../../src/ast.h"
 #include "tests.h"
 
 void test_make_node();

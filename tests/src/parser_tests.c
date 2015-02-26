@@ -1,5 +1,5 @@
-#include "parser.h"
-#include "ast.h"
+#include "../../src/parser.h"
+#include "../../src/ast.h"
 #include "tests.h"
 
 void test_parse_number();
