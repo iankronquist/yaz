@@ -1,5 +1,5 @@
 CC=clang
-CFLAGS= -O0 -Wall -Wpedantic -g
+CFLAGS= -O0 -Wall -Wpedantic -g -std=c99
 
 all: yaz
 
