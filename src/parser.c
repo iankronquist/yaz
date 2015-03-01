@@ -12,7 +12,7 @@ const char* precedences[] = {"<", ">", "+", "-", "*"};
 /**
     The number of operators in the precedences list.
 */
-const int num_operators = sizeof(precedences);
+const int num_operators = 5;
 
 /**
     @brief Takes a number token from the token list and produces a new ast_node
