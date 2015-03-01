@@ -142,7 +142,6 @@ int get_precedence(char* op) {
             return precedence;
         }
     }
-    panic("Unexpected operator!", "get_precedence");
     return -1;
 }
 
