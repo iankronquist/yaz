@@ -56,7 +56,7 @@ struct ast_node *parse_identifier(struct token_list *tkl) {
     cur = peek_token_list(tkl); // get the next token
 
     // If the next token is a ( this is a function call
-    if (cur->type == tok_punc && cur->value.string[0] == '(') {
+    if (cur != NULL && cur->type == tok_punc && cur->value.string[0] == '(') {
         //discard the paren
         pop_token_list(tkl);
         // allocate the function call
