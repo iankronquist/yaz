@@ -168,6 +168,8 @@ struct ast_node *parse_bin_op_right_side(struct token_list *tkl, int expr_prec, 
         struct token *cur = peek_token_list(tkl);
         if (cur != NULL && cur->type == tok_punc) {
             int precedence = get_precedence(cur->value.string);
+            if (precedence < expr_prec)
+                return left_side;
             struct token* bin_op = pop_token_list(tkl);
             struct ast_node* right_side = parse_primary(tkl);
             if (right_side == NULL) return NULL;
