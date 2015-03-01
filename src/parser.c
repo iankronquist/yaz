@@ -104,13 +104,15 @@ struct ast_node *parse_variable(struct token_list *tkl) {
 */
 struct ast_node *parse_primary(struct token_list *tkl) {
     struct token *cur = peek_token_list(tkl);
+    if (cur == NULL)
+        return NULL;
     switch (cur->type) {
         case tok_number:
             return parse_number(tkl);
         case tok_identifier:
             return parse_identifier(tkl);
         case tok_punc:
-            if (cur->value.string[0] == ')') {
+            if (cur->value.string[0] == '(') {
                 return parse_paren(tkl);
             }
         default:
