@@ -111,4 +111,17 @@ void test_parse_identifier() {
     EXPECT_EQ(result->children[0]->num_children, 0);
     destroy_token_list(tkl);
     delete_node(result);
+
+    tkl = make_token_list();
+    tk0 = make_token(tok_identifier, "a_function_with_1_arg", 0.0, 0);
+    append_token_list(tkl, tk0);
+    tk1 = make_token(tok_punc, "(", 0.0, 0);
+    append_token_list(tkl, tk1);
+    tk2 = make_token(tok_punc, ")", 0.0, 0);
+    append_token_list(tkl, tk2);
+    result = parse_identifier(tkl);
+    EXPECT_EQ(result->val, tk0);
+    EXPECT_EQ(result->num_children, 0);
+    destroy_token_list(tkl);
+    delete_node(result);
 }
