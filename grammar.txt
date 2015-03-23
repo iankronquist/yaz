@@ -29,6 +29,6 @@
 
 <arg_list> ::= <expression> | <expression>, <arg_list>
 
-<operator> ::= + | - | * | / | %
+<operator> ::= + | - | * | / | < | >
 
 <comment> ::= # <anything> <newline>
