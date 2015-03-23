@@ -14,7 +14,6 @@ struct ast_node *parse_identifier(struct token_list *tkl);
 struct ast_node *parse_primary(struct token_list *tkl);
 struct ast_node *parse_expr(struct token_list *tkl);
 struct ast_node *parse_bin_op_right_side(struct token_list *tkl, int expr_prec, struct ast_node *left_side);
-struct ast_node *parse_variable(struct token_list *tkl);
 // TODO: can this be merged with the function parsing code?
 struct ast_node *parse_prototype(struct token_list *tkl);
 
