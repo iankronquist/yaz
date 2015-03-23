@@ -51,9 +51,8 @@ struct ast_node *parse_paren(struct token_list *tkl) {
     @return Returns an ast_node representing a variable or a function.
 */
 struct ast_node *parse_identifier(struct token_list *tkl) {
-    struct token *cur = pop_token_list(tkl);
-    struct token *identifier = cur; // the identifier
-    cur = peek_token_list(tkl); // get the next token
+    struct token *identifier = pop_token_list(tkl);
+    struct token *cur = peek_token_list(tkl); // get the next token
 
     // If the next token is a ( this is a function call
     if (cur != NULL && cur->type == tok_punc && cur->value.string[0] == '(') {
@@ -65,22 +64,30 @@ struct ast_node *parse_identifier(struct token_list *tkl) {
         while (true) {
             // parse the expression
             struct ast_node *expr = parse_expr(tkl);
-            if (expr == NULL) return NULL;
+
+            if (expr == NULL)
+                parse_error("Not NULL", "NULL", "parsing function identifier");
+
+            // Append the expression to the function call's children
+            append_child(func_call, expr);
+
             cur = pop_token_list(tkl);
+
             // if the next token is a paren, stop
             if (cur->type == tok_punc && cur->value.string[0] == ')') {
+                pop_token_list(tkl);
                 break;
             } else if (cur->type == tok_punc && cur->value.string[0] != ',') {
                 // but if it's also not a comma, error
                 parse_error(") or ,", cur->value.string, "");
             }
-            // Append the expression to the function call's chilren
-            append_child(func_call, expr);
         }
+        return func_call;
     } else { // else it is just a variable
-        return parse_variable(tkl);
+        return make_node(identifier, 0);
     }
     // NOTREACHED
+    assert(0);
     return NULL;
 }
 
