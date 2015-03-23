@@ -86,8 +86,25 @@ void test_parse_identifier() {
     tk5 = make_token(tok_punc, ")", 0.0, 0);
     append_token_list(tkl, tk5);
     result = parse_identifier(tkl);
-    printf("%i\n", result->num_children);
-    print_token(result->val);
+    EXPECT_EQ(result->val, tk0);
+    EXPECT_EQ(result->num_children, 2);
+    EXPECT_EQ(result->children[0]->val, tk2);
+    EXPECT_EQ(result->children[1]->val, tk4);
+    EXPECT_EQ(result->children[0]->num_children, 0);
+    EXPECT_EQ(result->children[1]->num_children, 0);
+    destroy_token_list(tkl);
+    delete_node(result);
+
+    tkl = make_token_list();
+    tk0 = make_token(tok_identifier, "a_function_with_1_arg", 0.0, 0);
+    append_token_list(tkl, tk0);
+    tk1 = make_token(tok_punc, "(", 0.0, 0);
+    append_token_list(tkl, tk1);
+    tk2 = make_token(tok_identifier, "a", 0.0, 0);
+    append_token_list(tkl, tk2);
+    tk3 = make_token(tok_punc, ")", 0.0, 0);
+    append_token_list(tkl, tk3);
+    result = parse_identifier(tkl);
     EXPECT_EQ(result->val, tk0);
     EXPECT_EQ(result->num_children, 2);
     EXPECT_EQ(result->children[0]->val, tk2);
