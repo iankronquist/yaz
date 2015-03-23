@@ -106,11 +106,9 @@ void test_parse_identifier() {
     append_token_list(tkl, tk3);
     result = parse_identifier(tkl);
     EXPECT_EQ(result->val, tk0);
-    EXPECT_EQ(result->num_children, 2);
+    EXPECT_EQ(result->num_children, 1);
     EXPECT_EQ(result->children[0]->val, tk2);
-    EXPECT_EQ(result->children[1]->val, tk4);
     EXPECT_EQ(result->children[0]->num_children, 0);
-    EXPECT_EQ(result->children[1]->num_children, 0);
     destroy_token_list(tkl);
     delete_node(result);
 }
