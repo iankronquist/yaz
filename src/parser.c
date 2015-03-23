@@ -93,15 +93,6 @@ struct ast_node *parse_identifier(struct token_list *tkl) {
 
 
 /**
-    @brief Parse a variable token.
-    @param Takes a non-null token list.
-    @return Returns an ast_node representing a variable.
-*/
-struct ast_node *parse_variable(struct token_list *tkl) {
-    return make_node(pop_token_list(tkl), 0);
-}
-
-/**
     @brief The default state of the parser.
     The Parser may next enter 
     Note that if the parser encounters an unexpected token, it will panic, run
