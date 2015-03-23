@@ -48,6 +48,8 @@ struct ast_node *parse_paren(struct token_list *tkl) {
     @brief Parse an identifier token.
     @param Takes a non-null token list.
     Parses an identifier, which may be a function.
+    @todo clean up argument parsing logic, especially for the empty argument
+    case.
     @return Returns an ast_node representing a variable or a function.
 */
 struct ast_node *parse_identifier(struct token_list *tkl) {
@@ -60,27 +62,31 @@ struct ast_node *parse_identifier(struct token_list *tkl) {
         pop_token_list(tkl);
         // allocate the function call
         struct ast_node *func_call = make_node(identifier, 0);
-        // for each function in the list
-        while (true) {
-            // parse the expression
-            struct ast_node *expr = parse_expr(tkl);
+        if (peek_token_list(tkl)->value.string[0] != ')') {
+            // for each function in the list
+            while (true) {
+                // parse the expression
+                struct ast_node *expr = parse_expr(tkl);
 
-            if (expr == NULL)
-                parse_error("Not NULL", "NULL", "parsing function identifier");
+                if (expr == NULL)
+                    parse_error("Not NULL", "NULL", "parsing function identifier");
 
-            // Append the expression to the function call's children
-            append_child(func_call, expr);
+                // Append the expression to the function call's children
+                append_child(func_call, expr);
 
-            cur = pop_token_list(tkl);
+                cur = pop_token_list(tkl);
 
-            // if the next token is a paren, stop
-            if (cur->type == tok_punc && cur->value.string[0] == ')') {
-                pop_token_list(tkl);
-                break;
-            } else if (cur->type == tok_punc && cur->value.string[0] != ',') {
-                // but if it's also not a comma, error
-                parse_error(") or ,", cur->value.string, "");
+                // if the next token is a paren, stop
+                if (cur->type == tok_punc && cur->value.string[0] == ')') {
+                    pop_token_list(tkl);
+                    break;
+                } else if (cur->type == tok_punc && cur->value.string[0] != ',') {
+                    // but if it's also not a comma, error
+                    parse_error(") or ,", cur->value.string, "");
+                }
             }
+        } else {
+            pop_token_list(tkl);
         }
         return func_call;
     } else { // else it is just a variable
