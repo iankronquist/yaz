@@ -13,6 +13,8 @@
 
 <alpha> ::= [a-z] | [A-Z] | _
 
+<paren_expression> ::= (<expression>)
+
 <expression> ::= <function_call> | <expression> <operator> <expression> | <literal> | <if_expression> | <while_expression>
 
 <if_expression> ::= if <expression> { <expression_list> } | <if_expression> else <if_expression>
