@@ -2,12 +2,12 @@
 <float> ::= <int>.<int>
 <int> ::= [0-9]
 
-<newline> ::= \n
+<end_of_statement> ::= ; | \n
 
-<string_internal> ::= [^"] | <string_internal>\"
+<string_internal> ::= [^"]. | <string_internal>\"<string_internal>
 <string> ::= "<string_internal>"
 
-<literal> ::= <number> | <string> | <identifier>
+<literal> ::= <number> | <string>
 
 <identifier> ::= <alpha><identifier> | <identifier><number>
 
@@ -15,13 +15,15 @@
 
 <paren_expression> ::= (<expression>)
 
-<expression> ::= <function_call> | <expression> <operator> <expression> | <literal> | <if_expression> | <while_expression>
+<expression> ::= <function_call> | <expression> <operator> <expression>
 
-<if_expression> ::= if <expression> { <expression_list> } | <if_expression> else <if_expression>
+<statement> ::= <literal> | <if_statement> | <while_statement> | <identifier>
 
-<while_expression> ::= while <expression> { <expression_list> }
+<if_statement> ::= if <expression> { <expression_list> } | <if_expression> else <if_expression>
 
-<expression_list> ::= <expression> <newline> | <expression_list> <expression> <newline>
+<while_statement> ::= while <expression> { <expression_list> }
+
+<expression_list> ::= <expression> | <expression_list> <expression>
 
 <function> ::= function <identifier> (<arg_list>) { <expression_list> }
 
@@ -31,4 +33,4 @@
 
 <operator> ::= + | - | * | / | < | >
 
-<comment> ::= # <anything> <newline>
+<comment> ::= # <anything> \n
