@@ -37,6 +37,17 @@ parser_tests: parser token_list panic ast
 
 tests: ast_tests lexer_tests parser_tests
 
+coverage: CC=/usr/bin/clang
+coverage: CFLAGS= -O0 -Wall -Wpedantic -g -std=c99 -coverage
+coverage: ast_tests lexer_tests parser_tests
+	./tests/bin/ast_tests
+	./tests/bin/lexer_tests
+	./tests/bin/parser_tests
+	gcov -o . ./tests/src/ast_tests.c -b
+	gcov -o . ./tests/src/lexer_tests.c -b
+	gcov -o . ./tests/src/parser_tests.c -b
+
+
 docs:
 	doxygen Doxyfile
 
@@ -49,3 +60,8 @@ clean:
 	rm -f yaz
 	rm -rf tests/bin
 	rm -rf docs
+	rm -f *.gcda
+	rm -f *.gcno
+	rm -f *.gcov
+
+.PHONY: clean build coverage tests
