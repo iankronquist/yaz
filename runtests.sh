@@ -21,7 +21,7 @@ done
 for file in $(find build/bin -maxdepth 1 -type f); do
 	echo -e $BLUE "Testing " $file $NOCOLOR
 	if ! valgrind --error-exitcode=1 $file $ARGS; then
-		echo -e "Error: leaking memory"
+		echo -e $RED "Error:" $file "leaking memory" $NOCOLOR 1>&2
 		exit_code=1
 	else
 		echo -e $BLUE $file "passed" $NOCOLOR
