@@ -27,7 +27,7 @@ else {\
     RETURN_VALUE = EXIT_FAILURE;\
 }
 
-#define EXPECT_NEQ_STR(a, b) printf("Test %s == %s ", (#a), (#b));\
+#define EXPECT_NEQ_STR(a, b) printf("Test %s != %s ", (#a), (#b));\
 if (strcmp((a), (b)) != 0) {\
     printf(" %sPassed%s\n", GREEN, NOCOLOR);\
 }\
@@ -52,6 +52,7 @@ for (size_t i = 0; i < range; i++) {\
     if (sequence[i] == value) {\
         passed = 1;\
         printf("%sPassed%s\n", GREEN, NOCOLOR);\
+        break\
     }\
 }\
 if (!passed) {\
