@@ -40,7 +40,7 @@ void print_token(struct token *tk) {
 
 
 struct token_list* make_token_list() {
-    struct token_list *new_list = malloc(sizeof(struct token));
+    struct token_list *new_list = malloc(sizeof(struct token_list));
     new_list->head = NULL;
     new_list->tail = NULL;
     return new_list;
